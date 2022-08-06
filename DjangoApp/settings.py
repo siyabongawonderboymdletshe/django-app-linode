@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-(bgozq0ci5s=$go03(rfibw5onoy6+i^omxy6w_h3jc&^yot!v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['173.230.149.14']
-
+#ALLOWED_HOSTS = ['173.230.149.14']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'AuctionApp.apps.AuctionappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

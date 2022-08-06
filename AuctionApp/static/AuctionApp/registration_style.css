@@ -1,0 +1,26 @@
+.errorlist
+{
+   color: red; 
+   font-size: medium;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.dynamic-form-label
+{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+    color: rgb(37, 9, 9);
+}
+
+.dynamic-form-buttons-container
+{
+  
+    margin-top: 5px;
+}
+
+.dynamic-form-buttons-container button, a
+{
+  
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+}

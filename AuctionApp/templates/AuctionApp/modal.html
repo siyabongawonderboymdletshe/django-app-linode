@@ -1,0 +1,27 @@
+<div class="modal fade" id="myModal" role="dialog">
+   <div class="modal-dialog">
+   
+   <!-- Modal content-->
+   <div class="modal-content">
+      <div class="modal-header">
+         <h4 class="modal-title">{{ extradata.title }}</h4>
+      </div>
+      <div class="modal-body">
+         <p>
+            {{ extradata.message }}
+            <span>
+               {% if extradata.id  == 2 %}
+                  <a href="{% url 'AuctionApp:registerclient'  %}">register.</a>
+               {% elif extradata.id  == 4 %}
+                  <a href="{% url 'AuctionApp:login'  %}">login.</a>
+               {% endif %}
+            </span>
+         </p>
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+   </div>
+   
+   </div>
+</div>
