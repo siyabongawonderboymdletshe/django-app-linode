@@ -2,12 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django import forms
+from datetime import datetime
 
 # Create your models here.
 
 class ItemBuyer(models.Model):
   items = models.ManyToManyField('Item', blank=True)
-  user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
 
   class Meta:
         ordering = ['user']
@@ -16,7 +17,7 @@ class ItemBuyer(models.Model):
     item_name = ''
     for i, item in enumerate(self.items.all()):
       item_name += f' {i+1}. [{item.name}]'
-    return f'{self.user} has bought {item_name}'
+    return f'{self.user} bought {item_name}'
       
   
 class Item(models.Model):
@@ -30,7 +31,7 @@ class Item(models.Model):
         ordering = ['status']
 
   def __str__(self):
-    return f'{self.name}'
+    return f'{self.name}, {self.amount}, {self.status}'
 
 
 class RegistrationForm(forms.Form):
@@ -74,4 +75,14 @@ class LoginForm(forms.Form):
                                                                 'class': 'form-control'}),
                               error_messages={'required':'Password is required.'})
 
-    
+
+
+class PaymentRequestData(models.Model):
+  signature = models.CharField(max_length=32)
+  data = models.TextField(blank = True)
+  date_time = models.DateTimeField(auto_now_add=True)
+
+class PaymentResponseData(models.Model):
+  signature = models.CharField(max_length=32)
+  data = models.TextField(blank = True)
+  date_time = models.DateTimeField(auto_now_add=True)

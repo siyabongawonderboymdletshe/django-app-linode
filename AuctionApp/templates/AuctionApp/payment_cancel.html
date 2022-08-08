@@ -1,0 +1,25 @@
+{% extends 'AuctionApp/base.html' %}
+
+{% block  content %}
+{% load static %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'AuctionApp/registration_style.css' %}">
+<div class="container">
+    <h1>Hello! Payment was cencelled!</h1>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+   $(document).ready(function()
+   {
+      var extradata = "{{ extradata.message }}";
+      if(extradata && extradata.length > 0){
+         $("#myModal").modal("show");
+      }
+   });
+</script>
+
+{% endblock  %}

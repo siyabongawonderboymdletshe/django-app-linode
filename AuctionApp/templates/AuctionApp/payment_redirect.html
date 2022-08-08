@@ -1,0 +1,49 @@
+{% extends 'AuctionApp/base.html' %}
+
+{% block  content %}
+{% load static %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'AuctionApp/registration_style.css' %}">
+<div class="container">
+   <h1>
+      You'll be redirected to a 3rd party payment provider to make a deposit for your item.
+   </h2>
+   <div>
+      <p>Name: {{paysafe_payment_data.item_name}}</p>
+      <p>Description: {{paysafe_payment_data.item_description}}</p>
+      <p>Price: {{paysafe_payment_data.amount}}</p>
+   </div>
+
+   <form action="{{paysafe_payment_data.redirect_to_url}}" method="post" id="paymentForm">
+      <input type="hidden" name="merchant_id" value="{{paysafe_payment_data.merchant_id}}">
+      <input type="hidden" name="merchant_key" value="{{paysafe_payment_data.merchant_key}}">
+      <input type="hidden" name="return_url" value="{{paysafe_payment_data.return_url}}">
+      <input type="hidden" name="cancel_url" value="{{paysafe_payment_data.cancel_url}}">
+      <input type="hidden" name="notify_url" value="{{paysafe_payment_data.notify_url}}">
+      <input type="hidden" name="name_first" value="{{paysafe_payment_data.name_first}}">
+      <input type="hidden" name="name_last" value="{{paysafe_payment_data.name_last}}">
+      <input type="hidden" name="email_address" value="{{paysafe_payment_data.email_address}}">
+      <input type="hidden" name="m_payment_id" value="{{paysafe_payment_data.m_payment_id}}">
+      <input type="hidden" name="amount" value="{{paysafe_payment_data.amount}}">
+      <input type="hidden" name="item_name" value="{{paysafe_payment_data.item_name}}">
+      <input type="hidden" name="item_description" value="{{paysafe_payment_data.item_description}}">
+      <input type="hidden" name="email_confirmation" value="1">
+      <input type="hidden" name="signature" value="{{paysafe_payment_data.signature}}">
+      <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Proceed</button>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+   $(document).ready(function()
+   {
+      var extradata = "{{ extradata.message }}";
+      if(extradata && extradata.length > 0){
+         $("#myModal").modal("show");
+      }
+   });
+</script>
+
+{% endblock  %}

@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-(bgozq0ci5s=$go03(rfibw5onoy6+i^omxy6w_h3jc&^yot!v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['173.230.149.14']
-#ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['2b74-102-22-247-89.in.ngrok.io', '127.0.0.1', '173.230.149.14']
 
 # Application definition
 
@@ -106,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Harare'
 
 USE_I18N = True
 
@@ -124,3 +123,11 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'justmeforfun47@gmail.com'
+EMAIL_HOST_PASSWORD = 'lhfoiqomkvuyogwu'
+
