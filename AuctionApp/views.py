@@ -47,7 +47,7 @@ def paymentnotify(request, user_id, item_id):
     else:
         print('payment was not successful....')
 
-    return render (request, 'AuctionApp/payment_notify.html')
+    return HttpResponse(status=200)
 def items(request):
     items = Item.objects.annotate(
             relevancy=Case(When(status='AVAILABLE', then=3), When(status='SOLD', then=2), When(status='UNAVAILABLE', then=1), output_field=CharField())

@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(bgozq0ci5s=$go03(rfibw5onoy6+i^omxy6w_h3jc&^yot!v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['6554-102-22-247-89.in.ngrok.io', '127.0.0.1', '173.230.149.14']
+ALLOWED_HOSTS = ['127.0.0.1', 'www.mrgigpawnshop.tk', 'mrgigpawnshop.tk']
 
 # Application definition
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,3 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'justmeforfun47@gmail.com'
 EMAIL_HOST_PASSWORD = 'lhfoiqomkvuyogwu'
-
