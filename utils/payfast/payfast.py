@@ -7,7 +7,7 @@ import socket
 from werkzeug.urls import url_parse
 
 SALT_PASS_PHRASE = 'jt7NOE43FZPn'
-BASE_URL = settings.ALLOWED_HOSTS[0] if settings.DEBUG else settings.ALLOWED_HOSTS[1]
+BASE_URL = settings.ALLOWED_HOSTS[1] if settings.DEBUG else settings.ALLOWED_HOSTS[1]
 RETURN_URL = f'https://{BASE_URL}/AuctionApp/paymentreturn'
 CANCEL_URL = f'https://{BASE_URL}/AuctionApp/paymentcancel'
 NOTIFY_URL = f'https://{BASE_URL}/AuctionApp/paymentnotify'
