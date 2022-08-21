@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from AuctionApp.views import items, admin_dashboard
+from AuctionApp.views import items
+from AdminDashboard.views import admin_dashboard 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('AuctionApp/', include('AuctionApp.urls')),
     path('', view=items, name='AuctionAppItems'),
-    path('dashboard', view=admin_dashboard, name='AdminDashBoard'),
+    path('dashboard', include('AdminDashboard.urls')),
+    path('backoffice/', include('BackOfficeApp.urls')),
 ]

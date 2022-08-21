@@ -30,6 +30,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'www.mrgigpawnshop.tk', 'mrgigpawnshop.tk']
 # Application definition
 
 INSTALLED_APPS = [
+    'BackOfficeApp.apps.BackofficeappConfig',
+    'AdminDashboard.apps.AdmindashboardConfig',
     'AuctionApp.apps.AuctionappConfig',
     'django.contrib.admin',
     'django.contrib.auth',

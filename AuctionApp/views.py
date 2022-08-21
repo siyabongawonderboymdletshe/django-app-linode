@@ -16,11 +16,6 @@ from datetime import datetime
 from utils.payfast import payfast
 
 
-
-
-def admin_dashboard(request):
-    return render (request, 'AuctionApp/admin_dashboard.html')
-
 def paymentreturn(request):
     return render (request, 'AuctionApp/payment_return.html')
 def paymentcancel(request):
