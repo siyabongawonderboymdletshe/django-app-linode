@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Account, Customer, CustomerRegistrationForm, AccountRegistrationForm, DashboardSession, DashboardSession
+from .models import AccountItem, ProductItemImageForm, AccountItemForm, CustomerAsset, Account, Customer, CustomerRegistrationForm, AccountRegistrationForm, DashboardSession, DashboardSession, ProductCategoryForm, ProductItemForm
 from django.http import HttpResponse
 from django.db.models import F
 
@@ -18,7 +18,6 @@ def get_customers_list(request):
         'customers': customers,
     }
     return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session})
-
 
 def add_customer(request):  
     
@@ -42,12 +41,16 @@ def add_customer(request):
             customer = Customer.objects.filter(id_number = id).filter()
             if not customer:
                 customer= customerRegistrationForm.save()
-                print(customer)
                 account = accountRegistrationForm.save(commit=False)
                 account.customer = customer
                 account.save()
+                print(f'saved id: {account.id}')
                 dashboard_session_context.add_customer_message  = 'The customer was successfully added!'
                 dashboard_session_context.add_customer_message_class  = 'add_customer_message_class_success'
+                dashboard_session_context.add_customer_message_action_hyperlink_text = 'here.'
+                dashboard_session_context.add_customer_message_action = 'You can now add the customer product item'
+                dashboard_session_context.add_customer_message_action_hyperlink_url = f"BackOfficeApp:addproduct"
+                dashboard_session_context.add_customer_message_action_hyperlink_url_parameters = account.id
             else:
                 dashboard_session_context.add_customer_message_class  = 'add_customer_message_class_error'
                 dashboard_session_context.add_customer_message  = 'An account with the same ID number already exists. Choose a different one.'
@@ -58,6 +61,51 @@ def add_customer(request):
            
     return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
 
+def add_customer_product(request, account_id):
+    print(request.POST)
+    dashboard_session_context = DashboardSession()
+    productItemForm = ProductItemForm(use_required_attribute=False)
+    accountItemForm = AccountItemForm(use_required_attribute=False)
+    productItemImageForm = ProductItemImageForm(use_required_attribute=False)
+    dashboard_session_context.add_product_form = productItemForm
+    dashboard_session_context.add_account_item_form = accountItemForm
+    dashboard_session_context.add_product_image_form = productItemImageForm
+    dashboard_session_context.add_customer_post_form_parameters = account_id
+
+    if request.POST:
+        productItemForm = ProductItemForm(request.POST, use_required_attribute=False)
+        accountItemForm = AccountItemForm(request.POST, use_required_attribute=False)
+        productItemImageForm = ProductItemImageForm(request.POST, use_required_attribute=False)
+        dashboard_session_context.add_product_form = productItemForm
+        dashboard_session_context.add_account_item_form = accountItemForm
+        dashboard_session_context.add_product_image_form = productItemImageForm
+
+        if productItemForm.is_valid() and accountItemForm.is_valid():
+            account = Account.objects.select_related('customer').get(id = account_id)
+            customer = account.customer
+          
+            if not customer:
+                dashboard_session_context.add_customer_message_class  = 'add_customer_message_class_error'
+                dashboard_session_context.add_customer_message  = 'A customer with the provided ID number does not exist.'
+                dashboard_session_context.add_customer_message_action = 'You can add a new customer '
+                dashboard_session_context.add_customer_message_action_hyperlink_text = 'here.'
+                dashboard_session_context.add_customer_message_action_hyperlink_url = f"BackOfficeApp:addcustomer"
+            else:
+                product_item = productItemForm.save()
+                customer_asset = CustomerAsset(customer = customer, product_item = product_item)
+                customer_asset.save()
+                
+                account_item = AccountItem(account  = account, market_value = request.POST['market_value'], created_at = account.created_at, 
+                                            product_item = product_item, operative_date = request.POST['operative_date'], updated_at =account.created_at)
+                
+                account_item.save()
+
+                dashboard_session_context.add_customer_message  = 'The customer product was successfully added!'
+                dashboard_session_context.add_customer_message_class  = 'add_customer_message_class_success'
+                dashboard_session_context.add_customer_message_action_hyperlink_url_parameters = account_id
+
+    dashboard_session_context.display_template = 'AdminDashboard/dashboard_customer_add_product_item.html'
+    return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
 
 def update_customer(request, id_number):
     try:
@@ -155,7 +203,6 @@ def update_customer(request, id_number):
         dashboard_session_context.add_customer_message_action_hyperlink_url = f"BackOfficeApp:updatecustomer"
         dashboard_session_context.add_customer_message_action_hyperlink_url_parameters = id_number
         return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
-
 
 def delete_customer(request, id_number):
     try:

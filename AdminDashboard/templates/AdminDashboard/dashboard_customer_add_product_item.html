@@ -8,33 +8,42 @@
            <div class="form-holder">
              <div class="form-content">
                <div class="form-items">
-                 <h3>Add Customer</h3>
+                 <h3>Add Customer Product</h3>
                  
-                 <form id = "form1" action="{% url 'BackOfficeApp:addcustomer'  %}" method ="POST">
+                 <form id = "form1" action="{% url 'BackOfficeApp:addproduct' dashboard_session.add_customer_post_form_parameters %}" method ="POST">
                    
                   {% csrf_token %}
                   <br>
-                  <h7>Fill in the personal details below.</h7>
-                  {% for e in dashboard_session.add_customer_form %}
+                  <h7>Fill in the product details below.</h7>
+                  {% for e in dashboard_session.add_product_form %}
                      <div class="col-md-12">
                         {{e}}
                      </div>
-                     {% if dashboard_session.add_customer_form %}
+                     {% if dashboard_session.add_product_form %}
                         {{ e.errors }}
                      {% endif %}
                   {% endfor %}
-                  <h7>Fill in the loan details below.</h7>
-                  {% for e in dashboard_session.add_account_form %}
+                  <h7>Fill in the product auction details below.</h7>
+                  {% for e in dashboard_session.add_account_item_form %}
                      <div class="col-md-12">
                         {{e}}
                      </div>
-                     {% if dashboard_session.add_account_form %}
+                     {% if dashboard_session.add_account_item_form %}
                         {{ e.errors }}
                      {% endif %}
                   {% endfor %}
-      
+
+                  {% for e in dashboard_session.add_product_image_form %}
+                     <div class="col-md-12">
+                        {{e}}
+                     </div>
+                     {% if dashboard_session.add_product_image_form %}
+                        {{ e.errors }}
+                     {% endif %}
+                  {% endfor %}
+               
                    <div class="form-button mt-3">
-                     <button id="submit" type="submit" class="btn btn-primary">Register</button>
+                     <button id="submit" type="submit" class="btn btn-primary">Add</button>
                    </div>
                  </form>
                </div>
@@ -52,12 +61,14 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
  <script>
    $(document).ready(function(){
-      /*$('select option:contains("---------")').text('Select Gender Here');*/
-      $('#id_gender option:contains("---------")').text('Select Gender Here');
+     
       var extradata = "{{ dashboard_session.add_customer_message }}";
       if(extradata && extradata.length > 0){
          $("#myModal").modal("show");
       }
-   })
+      $('#id_category option:contains("---------")').text('Select Category Here');
+
+   });
+   
 </script>
  
