@@ -41,12 +41,12 @@ class ProductItem(models.Model):
 
 def content_file_name(instance, filename):
     ext = filename.split('.')[-1]
-    filename = "%s_%s_%s_%s.%s" % (instance.product_item.name, instance.product_item.year,'accountId', instance.product_item.id, ext)
+    filename = "%s_%s_%s_%s.%s" % (instance.product_item.name, instance.product_item.year,'productItemId', instance.product_item.id, ext)
     return os.path.join('product_images', filename)
 
 class ProductItemImage(models.Model):
   product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
-  image = models.FileField(upload_to=content_file_name)
+  image = models.ImageField(upload_to=content_file_name)
   def __str__(self):
     return f'{os.path.basename(self.image.name)}'
   
@@ -232,13 +232,7 @@ class ProductCategoryForm(forms.ModelForm):
   class Meta:
     model = ProductCategory
     fields = "__all__"
-    #widgets = {
-     #       'category': forms.TextInput(attrs={'placeholder': 'Enter Category Here' })
-    #}
-    #error_messages = {
-            #'category': {
-             #   'required':'The Category is required.'
-            #},
+
             
 class DashboardSession:
   display_template = ''

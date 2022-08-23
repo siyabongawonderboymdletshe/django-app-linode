@@ -8,8 +8,9 @@ from datetime import datetime, timedelta
 def filter_customers(filter):
 
     if filter == 'today':
+        date = datetime.now() - timedelta(days = 0)
+    elif filter == 'yesterday':
         date = datetime.now() - timedelta(days = 1)
-        print(date)
     elif filter == '5':
         date = datetime.now() - timedelta(days = 5)
     elif filter == '10':

@@ -10,7 +10,7 @@
                <div class="form-items">
                  <h3>Add Customer Product</h3>
                  
-                 <form id = "form1" action="{% url 'BackOfficeApp:addproduct' dashboard_session.add_customer_post_form_parameters %}" method ="POST">
+                 <form id = "form1" action="{% url 'BackOfficeApp:addproduct' dashboard_session.add_customer_post_form_parameters %}" method ="POST" enctype="multipart/form-data">
                    
                   {% csrf_token %}
                   <br>

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import AccountItem, ProductItemImageForm, AccountItemForm, CustomerAsset, Account, Customer, CustomerRegistrationForm, AccountRegistrationForm, DashboardSession, DashboardSession, ProductCategoryForm, ProductItemForm
+from .models import AccountItem, ProductItemImage, ProductItemImageForm, AccountItemForm, CustomerAsset, Account, Customer, CustomerRegistrationForm, AccountRegistrationForm, DashboardSession, DashboardSession, ProductCategoryForm, ProductItemForm
 from django.http import HttpResponse
 from django.db.models import F
 
@@ -62,7 +62,7 @@ def add_customer(request):
     return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
 
 def add_customer_product(request, account_id):
-    print(request.POST)
+   
     dashboard_session_context = DashboardSession()
     productItemForm = ProductItemForm(use_required_attribute=False)
     accountItemForm = AccountItemForm(use_required_attribute=False)
@@ -75,12 +75,15 @@ def add_customer_product(request, account_id):
     if request.POST:
         productItemForm = ProductItemForm(request.POST, use_required_attribute=False)
         accountItemForm = AccountItemForm(request.POST, use_required_attribute=False)
-        productItemImageForm = ProductItemImageForm(request.POST, use_required_attribute=False)
+        productItemImageForm = ProductItemImageForm(request.POST, request.FILES, use_required_attribute=False)
+
+        print(f'request.FILES: {request.FILES}')
+
         dashboard_session_context.add_product_form = productItemForm
         dashboard_session_context.add_account_item_form = accountItemForm
         dashboard_session_context.add_product_image_form = productItemImageForm
 
-        if productItemForm.is_valid() and accountItemForm.is_valid():
+        if productItemForm.is_valid() and accountItemForm.is_valid() and productItemImageForm.is_valid():
             account = Account.objects.select_related('customer').get(id = account_id)
             customer = account.customer
           
@@ -99,6 +102,10 @@ def add_customer_product(request, account_id):
                                             product_item = product_item, operative_date = request.POST['operative_date'], updated_at =account.created_at)
                 
                 account_item.save()
+
+                image = productItemImageForm.save(commit=False)
+                image.product_item = product_item
+                image.save()
 
                 dashboard_session_context.add_customer_message  = 'The customer product was successfully added!'
                 dashboard_session_context.add_customer_message_class  = 'add_customer_message_class_success'
