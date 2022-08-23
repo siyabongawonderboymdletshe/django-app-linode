@@ -23,7 +23,6 @@ class Customer(models.Model):
   def __str__(self):
     return f'{self.first_name} {self.last_name}'
 
-
 class ProductCategory(models.Model):
   name = models.CharField("Category", max_length=150, blank=False)
   def __str__(self):
@@ -37,7 +36,6 @@ class ProductItem(models.Model):
   description = models.TextField("Description", blank=False, default="")
   def __str__(self):
     return f'{self.year} {self.name}, with serial number {self.serial_number}'
-
 
 def content_file_name(instance, filename):
     ext = filename.split('.')[-1]
@@ -61,6 +59,7 @@ class Account(models.Model):
   rate = models.DecimalField("Rate", max_digits=5, decimal_places=2, blank= False)
   created_at = models.DateTimeField("Created Date")
   customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+  number_of_products = models.IntegerField("Number Of Products", blank= False)
   def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()
@@ -78,7 +77,7 @@ class AccountItem(models.Model):
   market_value = models.DecimalField("Market Value", max_digits=13, decimal_places=2, blank= False)
   account = models.ForeignKey(Account, on_delete=models.CASCADE)
   product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
-  operative_date = models.DateField("Operative Date", blank= False)
+  operative_date = models.DateField("Payment Due Date", blank= False)
   status = models.CharField(max_length=255, choices= STATUS_CHOICES, default='AVAILABLE')
   created_at = models.DateTimeField("Created Date", blank= False)
   updated_at = models.DateTimeField("Updated Date")
@@ -95,6 +94,18 @@ class Catalogue(models.Model):
 
   def __str__(self):
     return f'{self.product_item} and ready for auction.' 
+
+class ProductRequest(models.Model):
+  account_id = models.IntegerField("Account Id", blank= False)
+  hash_value = models.CharField("Request Hash", max_length=255)
+  created_at = models.DateTimeField("Created Date", blank= False, auto_now_add = True)
+  
+  def __str__(self):
+    return f'Hash = [{self.hash_value}], Account = {self.account_id}'
+
+
+
+#FORMS
 
 class CustomerRegistrationForm(forms.ModelForm):
   class Meta:
@@ -113,7 +124,7 @@ class CustomerRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(
                 attrs={'placeholder': 'Enter Email Address Here'}),
             'home_address': forms.Textarea(
-                attrs={'placeholder': 'Enter Home Address Here'}),
+                attrs={'placeholder': 'Enter Home Address Here', 'class': 'form-text-area'}),
             
     }
         
@@ -141,12 +152,18 @@ class CustomerRegistrationForm(forms.ModelForm):
 class AccountRegistrationForm(forms.ModelForm):
   class Meta:
     model = Account
-    fields =  ('loan_amount','rate')
+    fields =  ('loan_amount','rate', 'number_of_products')
+    labels = {
+       'loan_amount' : '',
+    }
     widgets = {
             'loan_amount': forms.NumberInput(
                 attrs={'placeholder': 'Enter Loan Amount Here' }),
             'rate': forms.NumberInput(
                 attrs={'placeholder': 'Enter Rate Here' }),
+
+            'number_of_products': forms.NumberInput(
+                attrs={'placeholder': 'Enter Number Of Products Here' }),    
             
             
         }
@@ -157,6 +174,9 @@ class AccountRegistrationForm(forms.ModelForm):
             },
             'rate': {
                 'required':'Rate is required.'
+            },
+            'number_of_products': {
+                'required':'The Number Of Product is required.'
             }
         } 
 
@@ -164,6 +184,9 @@ class ProductItemForm(forms.ModelForm):
   class Meta:
     model = ProductItem
     fields = "__all__"
+    labels = {
+       'name' : '','serial_number' : '','year' : '','description' : '','category' : '',
+    }
     widgets = {
             'name': forms.TextInput(
                 attrs={'placeholder': 'Enter Name Here' }),
@@ -172,7 +195,7 @@ class ProductItemForm(forms.ModelForm):
             'year': forms.NumberInput(
                 attrs={'placeholder': 'Enter Year Here'}),
             'description': forms.Textarea(
-                attrs={'placeholder': 'Enter Description Here'}),
+                attrs={'placeholder': 'Enter Description Here', 'class': 'form-text-area'}),
             
     }
     error_messages = {
@@ -197,11 +220,14 @@ class AccountItemForm(forms.ModelForm):
   class Meta:
     model = AccountItem
     fields =  ('market_value','operative_date')
+    labels = {
+       'market_value' : '','operative_date' : ''
+    }
     widgets = {
             'market_value': forms.NumberInput(
                 attrs={'placeholder': 'Enter Market Value Here'}),
             'operative_date': forms.DateTimeInput(
-                attrs={'placeholder': 'Select Operative Date Here',"onfocus":"this.type='date'",
+                attrs={'placeholder': 'Select Payment Due Date Here',"onfocus":"this.type='date'",
                 "onblur":"this.type='text'"  
                 })
     }
@@ -218,6 +244,9 @@ class ProductItemImageForm(forms.ModelForm):
   class Meta:
     model = ProductItemImage
     fields =  ('image',)
+    labels = {
+       'image' : ''
+    }
     widgets = {
             'image': forms.FileInput(
                 attrs={'placeholder': 'Select Product Image Here', 'class':'custom-file-input1'} ),
@@ -232,8 +261,7 @@ class ProductCategoryForm(forms.ModelForm):
   class Meta:
     model = ProductCategory
     fields = "__all__"
-
-            
+           
 class DashboardSession:
   display_template = ''
   add_customer_form = ''
@@ -245,11 +273,17 @@ class DashboardSession:
   add_customer_message_action_hyperlink_text = ''
   add_customer_message_action_hyperlink_url = ''
   add_customer_message_action_hyperlink_url_parameters = ''
+  add_customer_message_action_hyperlink_url_query_string = ''
   add_customer_post_form_parameters = ''
   add_product_form = ''
   add_product_catagory_form = ''
   add_product_customer_form = ''
   add_account_item_form = ''
   add_product_image_form = ''
+  add_number_of_products = ''
+  add_product_forms = []
+  add_account_item_forms = []
+  add_product_image_forms = []
+  add_product_forms_list = []
 
   

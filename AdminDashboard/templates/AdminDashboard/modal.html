@@ -16,7 +16,7 @@
             {%if dashboard_session.add_customer_message_action_hyperlink_url %}
                {% if dashboard_session.add_customer_message_action_hyperlink_url_parameters %}
                   <span>
-                     <a href="{% url dashboard_session.add_customer_message_action_hyperlink_url dashboard_session.add_customer_message_action_hyperlink_url_parameters %}">{{dashboard_session.add_customer_message_action_hyperlink_text}}</a>
+                     <a href="{% url dashboard_session.add_customer_message_action_hyperlink_url dashboard_session.add_customer_message_action_hyperlink_url_parameters %}?{{dashboard_session.add_customer_message_action_hyperlink_url_query_string}}">{{dashboard_session.add_customer_message_action_hyperlink_text}}</a>
                   </span>
                {% else %}
                   <span>

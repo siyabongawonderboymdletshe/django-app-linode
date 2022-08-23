@@ -10,10 +10,51 @@
                <div class="form-items">
                  <h3>Add Customer Product</h3>
                  
-                 <form id = "form1" action="{% url 'BackOfficeApp:addproduct' dashboard_session.add_customer_post_form_parameters %}" method ="POST" enctype="multipart/form-data">
+                 <form id = "form1" action="{% url 'BackOfficeApp:addproduct' %}?{{dashboard_session.add_customer_post_form_parameters}}" method ="POST" enctype="multipart/form-data">
                    
                   {% csrf_token %}
                   <br>
+                  
+
+                  {% for e in dashboard_session.add_product_forms_list %}
+                  <h7>Fill in the product {{forloop.counter}} details below</h7>
+                     
+                    {{e.productItemForm.as_div}}
+                    {% if e.productItemForm %}
+                        {{ e.productItemForm.as_div.errors }}
+                     {% endif %}
+                    
+                     <h7>Fill in the product {{forloop.counter}} auction details below.</h7> 
+                     {{e.accountItemForm.as_div}}
+                     {{e.productItemImageForm.as_div}}
+                     <br><br>
+                  {% endfor %}
+                  <!---
+                  {% for e in dashboard_session.add_product_forms_list %}
+                     <h7>Fill in the product {{forloop.counter}} details below</h7>
+                     <div class="col-md-12">
+                        {{e.as_div}}
+                     </div>
+                     {% if dashboard_session.add_product_form %}
+                        {{ e.errors }}
+                     {% endif %}
+                       
+                     {% with dashboard_session.add_product_image_forms as list %}
+                        {% with forloop.counter as index %}
+                         {% with list.index as form %}
+                        <h7>Fill in the product auction details below.</h7>
+                        <div class="col-md-12">
+                           {{ form }}
+                        </div>
+                        {% if dashboard_session.add_product_image_forms %}
+                           {{ ee.errors }}
+                        {% endif %}
+                        {% endwith %}
+                        {% endwith %}
+                     {% endwith %}
+                  {% endfor %} --> 
+                 
+                  <!---
                   <h7>Fill in the product details below.</h7>
                   {% for e in dashboard_session.add_product_form %}
                      <div class="col-md-12">
@@ -22,25 +63,27 @@
                      {% if dashboard_session.add_product_form %}
                         {{ e.errors }}
                      {% endif %}
-                  {% endfor %}
+                  {% endfor %}-->
+
+                  <!--
                   <h7>Fill in the product auction details below.</h7>
-                  {% for e in dashboard_session.add_account_item_form %}
+                  {% for e in dashboard_session.add_account_item_forms %}
                      <div class="col-md-12">
-                        {{e}}
+                        {{e.as_div}}
                      </div>
-                     {% if dashboard_session.add_account_item_form %}
+                     {% if dashboard_session.add_account_item_forms %}
                         {{ e.errors }}
                      {% endif %}
                   {% endfor %}
 
-                  {% for e in dashboard_session.add_product_image_form %}
+                  {% for e in dashboard_session.add_product_image_forms %}
                      <div class="col-md-12">
                         {{e}}
                      </div>
-                     {% if dashboard_session.add_product_image_form %}
+                     {% if dashboard_session.add_product_image_forms %}
                         {{ e.errors }}
                      {% endif %}
-                  {% endfor %}
+                  {% endfor %}-->
                
                    <div class="form-button mt-3">
                      <button id="submit" type="submit" class="btn btn-primary">Add</button>
@@ -66,7 +109,7 @@
       if(extradata && extradata.length > 0){
          $("#myModal").modal("show");
       }
-      $('#id_category option:contains("---------")').text('Select Category Here');
+      $('#id_productItemForm1-category option:contains("---------")').text('Select Category Here');
 
    });
    

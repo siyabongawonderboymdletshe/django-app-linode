@@ -134,7 +134,7 @@
     overflow-y:auto
 }
 
-#id_home_address, #id_description
+.form-text-area
 {
     margin-top: 19px;
 }
