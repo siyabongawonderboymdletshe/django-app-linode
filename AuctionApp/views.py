@@ -15,6 +15,7 @@ from django.utils import timezone
 from datetime import datetime
 from utils.payfast import payfast
 
+
 def paymentreturn(request):
     return render (request, 'AuctionApp/payment_return.html')
 def paymentcancel(request):

@@ -16,8 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from AuctionApp.views import items
+from AdminDashboard.views import admin_dashboard
+from django.conf import settings
+from django.conf.urls.static import static 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('AuctionApp/', include('AuctionApp.urls')),
-     path('', view=items, name='AuctionAppItems'),
-]
+    #path('', view=items, name='AuctionAppItems'),
+    #path('dashboard', include('AdminDashboard.urls')),
+    path('backoffice/', include('BackOfficeApp.urls')),
+    path('', include('AdminDashboard.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,36 @@
+<div class="modal fade" id="myModal" role="dialog">
+   <div class="modal-dialog">
+   
+   <!-- Modal content-->
+   <div class="modal-content">
+      <div class="modal-header dashboard-modal-header">
+         <h4 class="modal-title">{{ dashboard_session.add_customer_title }}</h4>
+      </div>
+      <div class="modal-body">
+         <p class ="{{dashboard_session.add_customer_message_class}}">
+            {{ dashboard_session.add_customer_message }}
+         </p>
+         <p class ="{{dashboard_session.add_customer_message_class}}">
+            {{ dashboard_session.add_customer_message_action }}
+            
+            {%if dashboard_session.add_customer_message_action_hyperlink_url %}
+               {% if dashboard_session.add_customer_message_action_hyperlink_url_parameters %}
+                  <span>
+                     <a href="{% url dashboard_session.add_customer_message_action_hyperlink_url dashboard_session.add_customer_message_action_hyperlink_url_parameters %}">{{dashboard_session.add_customer_message_action_hyperlink_text}}</a>
+                  </span>
+               {% else %}
+                  <span>
+                     <a href="{% url dashboard_session.add_customer_message_action_hyperlink_url %}">{{dashboard_session.add_customer_message_action_hyperlink_text}}</a>
+                  </span>
+               {% endif %}   
+            {% endif %}
+
+         </p>
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+   </div>
+   
+   </div>
+</div>

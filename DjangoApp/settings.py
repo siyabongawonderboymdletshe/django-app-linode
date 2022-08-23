@@ -23,13 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(bgozq0ci5s=$go03(rfibw5onoy6+i^omxy6w_h3jc&^yot!v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =True
+
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'www.mrgigpawnshop.tk', 'mrgigpawnshop.tk']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'BackOfficeApp.apps.BackofficeappConfig',
+    'AdminDashboard.apps.AdmindashboardConfig',
     'AuctionApp.apps.AuctionappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,6 +123,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
