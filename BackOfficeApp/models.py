@@ -187,6 +187,7 @@ class ProductItemForm(forms.ModelForm):
     labels = {
        'name' : '','serial_number' : '','year' : '','description' : '','category' : '',
     }
+   
     widgets = {
             'name': forms.TextInput(
                 attrs={'placeholder': 'Enter Name Here' }),
@@ -196,6 +197,8 @@ class ProductItemForm(forms.ModelForm):
                 attrs={'placeholder': 'Enter Year Here'}),
             'description': forms.Textarea(
                 attrs={'placeholder': 'Enter Description Here', 'class': 'form-text-area'}),
+            'category': forms.Select(
+                attrs={'placeholder': 'Select Category Here', 'class': 'form-category'}),
             
     }
     error_messages = {
