@@ -59,7 +59,7 @@
     color: #fff;
 }
 
-.form-content input[type=text], .form-content input[type=password], .form-content input[type=email], .form-content input[type=number], #id_operative_date, .form-content select, .form-content input[type=file], .form-content input[type=button] {
+.form-content input[type=text], .form-content input[type=password], .form-content input[type=email], .form-content input[type=number], #id_operative_date, .form-content select, .form-content input[type=file], .form-content input[type=button], .form-content input[type=date] {
     width: 100%;
     padding: 9px 20px;
     text-align: left;
@@ -228,7 +228,7 @@
     visibility: hidden;
   }
   .custom-file-input::before {
-    content: 'Select some files';
+    content: 'Select Image';
     display: inline-block;
     background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
     border: 1px solid #999;
@@ -248,3 +248,8 @@
   .custom-file-input:active::before {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
   }
+
+  hr {
+    border: 1px solid red;
+  }
+  

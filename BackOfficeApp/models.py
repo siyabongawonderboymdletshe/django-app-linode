@@ -33,9 +33,11 @@ class ProductItem(models.Model):
   year = models.IntegerField("Year", blank= False)
   serial_number = models.CharField("Serial Number", max_length=150, blank=False)
   category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+  market_value = models.DecimalField("Market Value", max_digits=13, decimal_places=2, blank= False)
   description = models.TextField("Description", blank=False, default="")
+  
   def __str__(self):
-    return f'{self.year} {self.name}, with serial number {self.serial_number}'
+    return f'{self.year}, {self.name}, {self.serial_number}'
 
 def content_file_name(instance, filename):
     ext = filename.split('.')[-1]
@@ -60,6 +62,7 @@ class Account(models.Model):
   created_at = models.DateTimeField("Created Date")
   customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
   number_of_products = models.IntegerField("Number Of Products", blank= False)
+  payment_due_date = models.DateField("Payment Due Date", blank= False)
   def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()
@@ -70,19 +73,17 @@ class Account(models.Model):
         ordering = ['created_at']
 
   def __str__(self):
-    return f'{self.customer} has a loan of R{self.loan_amount}'
+    return f'{self.id}'
   
 class AccountItem(models.Model):
   STATUS_CHOICES = (  ('AVAILABLE', 'AVAILABLE'),  ('SOLD', 'SOLD'), ('REMOVED', 'REMOVED'),  ('UNAVAILABLE', 'UNAVAILABLE'))
-  market_value = models.DecimalField("Market Value", max_digits=13, decimal_places=2, blank= False)
   account = models.ForeignKey(Account, on_delete=models.CASCADE)
-  product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
-  operative_date = models.DateField("Payment Due Date", blank= False)
+  product_item = models.ManyToManyField(ProductItem, blank=False)
   status = models.CharField(max_length=255, choices= STATUS_CHOICES, default='AVAILABLE')
   created_at = models.DateTimeField("Created Date", blank= False)
   updated_at = models.DateTimeField("Updated Date")
   def __str__(self):
-    return f'{self.account} and product {self.product_item}'
+    return f'{self.account}'
 
   def save(self, *args, **kwargs):
         if self.id:
@@ -103,7 +104,8 @@ class ProductRequest(models.Model):
   def __str__(self):
     return f'Hash = [{self.hash_value}], Account = {self.account_id}'
 
-
+class KeepProductImage(models.Model):
+    keep_image = models.BooleanField()
 
 #FORMS
 
@@ -152,20 +154,21 @@ class CustomerRegistrationForm(forms.ModelForm):
 class AccountRegistrationForm(forms.ModelForm):
   class Meta:
     model = Account
-    fields =  ('loan_amount','rate', 'number_of_products')
+    fields =  ('loan_amount','rate', 'number_of_products', 'payment_due_date')
     labels = {
-       'loan_amount' : '',
+       'loan_amount' : '', 'rate' : '', 'number_of_products' : '', 'payment_due_date' : '',
     }
     widgets = {
             'loan_amount': forms.NumberInput(
                 attrs={'placeholder': 'Enter Loan Amount Here' }),
             'rate': forms.NumberInput(
                 attrs={'placeholder': 'Enter Rate Here' }),
-
             'number_of_products': forms.NumberInput(
-                attrs={'placeholder': 'Enter Number Of Products Here' }),    
-            
-            
+                attrs={'placeholder': 'Enter Number Of Products Here' }),
+            'payment_due_date': forms.DateTimeInput(
+                attrs={'placeholder': 'Select Payment Due Date Here',"onfocus":"this.type='date'",
+                "onblur":"this.type='text'"  
+                })  
         }
         
     error_messages = {
@@ -177,6 +180,9 @@ class AccountRegistrationForm(forms.ModelForm):
             },
             'number_of_products': {
                 'required':'The Number Of Product is required.'
+            },
+            'payment_due_date': {
+                'required':'The Payment Due Date is required.'
             }
         } 
 
@@ -185,7 +191,7 @@ class ProductItemForm(forms.ModelForm):
     model = ProductItem
     fields = "__all__"
     labels = {
-       'name' : '','serial_number' : '','year' : '','description' : '','category' : '',
+       'name' : '','serial_number' : '','year' : '','description' : '','category' : '', 'market_value':''
     }
    
     widgets = {
@@ -199,6 +205,8 @@ class ProductItemForm(forms.ModelForm):
                 attrs={'placeholder': 'Enter Description Here', 'class': 'form-text-area'}),
             'category': forms.Select(
                 attrs={'placeholder': 'Select Category Here', 'class': 'form-category'}),
+            'market_value': forms.NumberInput(
+                attrs={'placeholder': 'Enter Market Value Here' }),
             
     }
     error_messages = {
@@ -216,32 +224,11 @@ class ProductItemForm(forms.ModelForm):
             },
             'category': {
                 'required':'The Category is required.'
-            }
-  }
-    
-class AccountItemForm(forms.ModelForm):
-  class Meta:
-    model = AccountItem
-    fields =  ('market_value','operative_date')
-    labels = {
-       'market_value' : '','operative_date' : ''
-    }
-    widgets = {
-            'market_value': forms.NumberInput(
-                attrs={'placeholder': 'Enter Market Value Here'}),
-            'operative_date': forms.DateTimeInput(
-                attrs={'placeholder': 'Select Payment Due Date Here',"onfocus":"this.type='date'",
-                "onblur":"this.type='text'"  
-                })
-    }
-    error_messages = {
+            },
             'market_value': {
                 'required':'The Market Value is required.'
-            },
-            'operative_date': {
-                'required':'The Operative Date is required.'
             }
-    }
+  }
 
 class ProductItemImageForm(forms.ModelForm):
   class Meta:
@@ -252,7 +239,7 @@ class ProductItemImageForm(forms.ModelForm):
     }
     widgets = {
             'image': forms.FileInput(
-                attrs={'placeholder': 'Select Product Image Here', 'class':'custom-file-input1'} ),
+                attrs={'placeholder': 'Select Product Image Here', 'class':'custom-file-input'} ),
     }
     error_messages = {
             'image': {
@@ -264,7 +251,12 @@ class ProductCategoryForm(forms.ModelForm):
   class Meta:
     model = ProductCategory
     fields = "__all__"
-           
+
+class KeepProductImageForm(forms.ModelForm):
+    class Meta:
+        model = KeepProductImage
+        fields = "__all__" 
+
 class DashboardSession:
   display_template = ''
   add_customer_form = ''
@@ -288,5 +280,12 @@ class DashboardSession:
   add_account_item_forms = []
   add_product_image_forms = []
   add_product_forms_list = []
+  modal_close_url = ''
+  test_image = ''
+
+class UpdateProductData:
+    is_product_update=False
+    product_item_list = ''
+    product_item_image_list = ''
 
   

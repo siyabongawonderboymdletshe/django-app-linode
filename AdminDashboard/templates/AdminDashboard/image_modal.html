@@ -1,0 +1,24 @@
+<div class="modal fade" id="image_modal" role="dialog">
+   <div class="modal-dialog">
+   
+   <!-- Modal content-->
+   <div class="modal-content">
+      <div class="modal-header dashboard-modal-header">
+         <h4 class="modal-title">{{ dashboard_session.add_customer_title }}</h4>
+      </div>
+      <div class="modal-body" style="color: red">
+         {% if context.images %}
+         {% for image in context.images %}
+            <img src="{{ MEDIA_URL }}product_images/{{ image }}" alt="{{ image }}">
+           {% endfor %}
+          {% else %}
+         <p>No image available.</p>
+      {% endif %}
+      </div>
+      <div class="modal-footer">
+         <a href="">Close</a>
+      </div>
+   </div>
+   
+   </div>
+</div>

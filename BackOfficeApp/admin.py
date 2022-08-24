@@ -29,7 +29,8 @@ class ProductRequestAdmin(admin.ModelAdmin):
 
 class AccountItemAdmin(admin.ModelAdmin):
     model: AccountItem
-    list_display = ("id","account", "product_item","status", "created_at","updated_at")
+    list_display = ("id","account", "status", "created_at","updated_at")
+    filter_horizontal = ('product_item',)
     list_filter = ("created_at","account_id")
 
 # Register your models here.
