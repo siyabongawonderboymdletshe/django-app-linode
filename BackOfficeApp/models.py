@@ -295,7 +295,9 @@ class DashboardSession:
   modal_close_url = ''
   test_image = ''
   add_product_category =''
+  product_category_id =''
   product_categories = []
+
 
 class UpdateProductData:
     is_product_update=False

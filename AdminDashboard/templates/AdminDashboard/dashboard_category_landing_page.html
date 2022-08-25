@@ -7,8 +7,6 @@
   </button>
   <div class="dropdown-menu">
     <a class="dropdown-item" href="{% url 'BackOfficeApp:add_product_category'  %}">Add Category</a>
-    <a class="dropdown-item" href="{% url 'BackOfficeApp:add_product_category'  %}">Update Category</a>
-    <a class="dropdown-item" href="{% url 'BackOfficeApp:add_product_category'  %}">Delete Category</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header">Categories Filters</h6>
     
@@ -27,7 +25,7 @@
             <tbody>
                 {% for category in dashboard_session.product_categories %}
                 <tr>
-                    <th scope="row"> <a href="{% url 'BackOfficeApp:add_product_category' %}">{{forloop.counter}}</a></th>
+                    <th scope="row"> <a href="{% url 'BackOfficeApp:update_product_category' category_id=category.id %}">{{forloop.counter}}</a></th>
                     <td>{{category.id}}</td>
                     <td>{{category.name}}</td>
                 </tr>

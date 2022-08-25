@@ -3,14 +3,24 @@
  <div class="container">
    <div class="row">
      <div class="col-12">
+
+      <div class="btn-group dropright customers-action-button">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Action
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{% url 'BackOfficeApp:delete_product_category' category_id=dashboard_session.product_category_id %}" id="deletecategory">Delete Category</a>
+        </div>
+      </div>
+          
       <div class="form-body">
          <div class="row">
            <div class="form-holder">
              <div class="form-content">
                <div class="form-items">
-                 <h3>Add Product Category</h3>
+                 <h3>Update Product Category</h3>
                  
-                 <form id = "form1" action="{% url 'BackOfficeApp:add_product_category' %}" method ="POST" enctype="multipart/form-data">
+                 <form id = "form1" action="{% url 'BackOfficeApp:update_product_category' category_id=dashboard_session.product_category_id %}" method ="POST" enctype="multipart/form-data">
                    
                   {% csrf_token %}
                   <br>
@@ -23,7 +33,7 @@
                      {% endfor %}
 
                    <div class="form-button mt-3">
-                     <button id="submit" type="submit" class="btn btn-primary">Add</button>
+                     <button id="submit" type="submit" class="btn btn-primary">Update</button>
                    </div>
                  </form>
                </div>
