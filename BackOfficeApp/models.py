@@ -37,7 +37,7 @@ class ProductItem(models.Model):
   description = models.TextField("Description", blank=False, default="")
   
   def __str__(self):
-    return f'{self.year}, {self.name}, {self.serial_number}'
+    return f'{self.id}, {self.year}, {self.name}, {self.serial_number}'
 
 def content_file_name(instance, filename):
     ext = filename.split('.')[-1]
@@ -207,6 +207,7 @@ class ProductItemForm(forms.ModelForm):
                 attrs={'placeholder': 'Select Category Here', 'class': 'form-category'}),
             'market_value': forms.NumberInput(
                 attrs={'placeholder': 'Enter Market Value Here' }),
+            'id': forms.HiddenInput()
             
     }
     error_messages = {
@@ -251,11 +252,22 @@ class ProductCategoryForm(forms.ModelForm):
   class Meta:
     model = ProductCategory
     fields = "__all__"
+    widgets = {
+            'name': forms.TextInput(
+                attrs={'placeholder': 'Enter Name Here' }),
+        }
+    error_messages = {
+            'name': {
+                'required':'The Name is required.'
+            }
+    }   
+    
 
 class KeepProductImageForm(forms.ModelForm):
     class Meta:
         model = KeepProductImage
         fields = "__all__" 
+        
 
 class DashboardSession:
   display_template = ''
@@ -282,6 +294,8 @@ class DashboardSession:
   add_product_forms_list = []
   modal_close_url = ''
   test_image = ''
+  add_product_category =''
+  product_categories = []
 
 class UpdateProductData:
     is_product_update=False

@@ -1,14 +1,10 @@
-from tempfile import template
-from turtle import title
 from django.shortcuts import render
-from .models import UpdateProductData, KeepProductImageForm, ProductRequest, AccountItem, ProductItemImage, ProductItemImageForm, CustomerAsset, Account, Customer, CustomerRegistrationForm, AccountRegistrationForm, DashboardSession, DashboardSession, ProductCategoryForm, ProductItemForm
+from .models import ProductCategory, ProductItem, UpdateProductData, KeepProductImageForm, ProductRequest, AccountItem, ProductItemImage, ProductItemImageForm, CustomerAsset, Account, Customer, CustomerRegistrationForm, AccountRegistrationForm, DashboardSession, DashboardSession, ProductCategoryForm, ProductItemForm
 from django.http import HttpResponse
 from django.db.models import F
 import hashlib
 import json
-from django.core.files import File
-from DjangoApp import settings
-import os
+
 
 
 def get_request_hash_value(request):
@@ -55,13 +51,14 @@ def get_products_forms(request, number_of_products=1, is_post_form =False, updat
             new_dictionary = {}
             for k in item_dictionary:
                 new_dictionary[f'productItemForm{i}-{k}'] = item_dictionary[k]
+    
         
             image = ProductItemImage.objects.filter(product_item_id = item.id).first()
     
             productItemForm = ProductItemForm(new_dictionary, use_required_attribute=False, prefix = f'productItemForm{i}')
             productItemImageForm = ProductItemImageForm(use_required_attribute=False, prefix = f'productItemImageForm{i}')
             keepProductImage = KeepProductImageForm(use_required_attribute=False, prefix = f'updateProductImageForm{i}')
-
+           
             list = {
             'productItemForm': productItemForm,
             'productItemImageForm': productItemImageForm,
@@ -93,6 +90,21 @@ def get_products_forms(request, number_of_products=1, is_post_form =False, updat
         i += 1
         
     return add_product_forms_list
+
+def save_post_update_product_form(request, account_items):
+    i = 1
+    for item in account_items:
+        print(item)
+        image = ProductItemImage.objects.filter(product_item_id = item.id).first()
+
+        productItemForm = ProductItemForm(request.POST, use_required_attribute=False, prefix = f'productItemForm{i}', instance=item)
+        productItemImageForm = ProductItemImageForm(request.POST, request.FILES, use_required_attribute=False, prefix = f'productItemImageForm{i}', instance=image)
+        
+        print('productItemImageForm valid? ', productItemImageForm.is_valid(), request.FILES)
+        
+        productItemForm.save()
+        productItemImageForm.save()
+        i += 1
 
 def get_customers_list(request):
 
@@ -145,18 +157,17 @@ def add_customer(request):
     return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
 
 def update_customer_product(request, account_id):
-
-    
     account_item = AccountItem.objects.filter(account__id__exact=account_id).first()
-
-    number_of_products = 0 if not account_item  else account_item.account.number_of_products
-
+    number_of_products = 1 if not account_item  else account_item.account.number_of_products
+    
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/dashboard_customer_update_product_item.html',
     title='Add Customer Product', post_form_parameters = account_id)
     
     if not account_item:
-        account_item = AccountItem.objects.select_related('account').filter(account__id__exact=account_id).first()
-        return HttpResponse(account_item)
+        dashboard_session_context = get_dashboard_session_context(message=f'The account with Id {account_id} does not exist', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/dashboard_customer_add_product_item.html',
+            title='Add Customer Product', message_action='You can add a new customer ', hyperlink_text='here', hyperlink_url='BackOfficeApp:addcustomer', modal_close_url='BackOfficeApp:customers')
+        dashboard_session_context.add_product_forms_list = get_products_forms(request, number_of_products)
+        return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
     
     if request.POST:
         dashboard_session_context.add_product_forms_list = get_products_forms(request, number_of_products, is_post_form=True)
@@ -178,35 +189,13 @@ def update_customer_product(request, account_id):
                 dashboard_session_context = get_dashboard_session_context(message='A customer with the provided ID number does not exist.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/dashboard_customer_add_product_item.html',
                 title='Update Customer Product', hyperlink_text='here', message_action = 'You can add a new customer',  hyperlink_url='BackOfficeApp:addcustomer', modal_close_url='BackOfficeApp:customers')
             else:
-                account_item = AccountItem(account  = account, created_at = account.created_at, updated_at =account.created_at)
-                account_item.save()
-
-                for form in dashboard_session_context.add_product_forms_list:
-                    product_item = form['productItemForm'].save()
-                
-                    customer_asset = CustomerAsset(customer = customer, product_item = product_item)
-                    customer_asset.save()
-                    
-                    account_item.product_item.add(product_item)
-                    
-                    if not form['keepProductImage'].save(commit=False).keep_image:
-                        image = form['productItemImageForm'].save(commit=False)
-                        image.product_item = product_item
-                        image.save()
-
-                    product_request = ProductRequest(account_id = account_id, hash_value = get_request_hash_value(request))
-                    product_request.save()
-
-                account_item.save()
-                print(account_item.product_item.all())
-                print()
+                save_post_update_product_form(request, account_item.product_item.all())
                 dashboard_session_context = get_dashboard_session_context(message='The customer product was successfully updated!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/dashboard_customer_add_product_item.html',
                 title='Update Customer Product', hyperlink_text='here', message_action = 'You can add a new customer',  hyperlink_url='BackOfficeApp:addcustomer', modal_close_url='BackOfficeApp:customers')
                 
                 dashboard_session_context.add_product_forms_list = get_products_forms(request, number_of_products)
 
         return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
-
 
     data = UpdateProductData()
     data.is_product_update = True
@@ -404,3 +393,34 @@ def delete_customer(request, id_number):
         return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
     except Exception as e:
         print(e)
+
+
+def add_product_category(request):
+    dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/dashboard_add_product_category.html',
+    title='Add Product Category')
+    productCategoryForm = ProductCategoryForm(use_required_attribute=False)
+    dashboard_session_context.add_product_category = productCategoryForm
+
+    if request.POST:
+        productCategoryForm = ProductCategoryForm(request.POST, use_required_attribute=False)
+        dashboard_session_context.add_product_category = productCategoryForm
+        if productCategoryForm.is_valid():
+            productCategoryForm.save()
+            dashboard_session_context = get_dashboard_session_context(message='The product category was successfully added!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/dashboard_add_product_category.html',
+                title='Add Customer Product', hyperlink_text='here', message_action = 'You can update the details ',  hyperlink_url='BackOfficeApp:add_product_category', modal_close_url='BackOfficeApp:customers')
+            dashboard_session_context.add_product_category = productCategoryForm
+            print(dashboard_session_context.add_product_category)
+    return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+
+
+def get_product_categories(request):
+    dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/dashboard_category_landing_page.html')
+    dashboard_session_context.product_categories = ProductCategory.objects.all()
+
+    if not dashboard_session_context.product_categories:
+        print('does not exist')
+        return HttpResponse('OPPPS!')
+    return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+
+ 
+

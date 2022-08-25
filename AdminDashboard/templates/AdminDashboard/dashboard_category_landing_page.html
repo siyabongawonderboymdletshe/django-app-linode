@@ -1,0 +1,38 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'AdminDashboard/customer_registration.css' %}">
+
+<div class="btn-group dropright customers-action-button">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Action
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="{% url 'BackOfficeApp:add_product_category'  %}">Add Category</a>
+    <a class="dropdown-item" href="{% url 'BackOfficeApp:add_product_category'  %}">Update Category</a>
+    <a class="dropdown-item" href="{% url 'BackOfficeApp:add_product_category'  %}">Delete Category</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header">Categories Filters</h6>
+    
+  </div>
+</div>
+<div class="row my-5 customers-table table-responsive">
+    <h3>Categories</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" width="50">#</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in dashboard_session.product_categories %}
+                <tr>
+                    <th scope="row"> <a href="{% url 'BackOfficeApp:add_product_category' %}">{{forloop.counter}}</a></th>
+                    <td>{{category.id}}</td>
+                    <td>{{category.name}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div> 
+
