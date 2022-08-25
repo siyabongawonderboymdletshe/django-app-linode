@@ -207,7 +207,6 @@ class ProductItemForm(forms.ModelForm):
                 attrs={'placeholder': 'Select Category Here', 'class': 'form-category'}),
             'market_value': forms.NumberInput(
                 attrs={'placeholder': 'Enter Market Value Here' }),
-            'id': forms.HiddenInput()
             
     }
     error_messages = {
@@ -261,13 +260,17 @@ class ProductCategoryForm(forms.ModelForm):
                 'required':'The Name is required.'
             }
     }   
-    
 
 class KeepProductImageForm(forms.ModelForm):
     class Meta:
         model = KeepProductImage
         fields = "__all__" 
         
+
+
+
+
+#Other classes
 
 class DashboardSession:
   display_template = ''
@@ -297,6 +300,12 @@ class DashboardSession:
   add_product_category =''
   product_category_id =''
   product_categories = []
+  all_customers_products = []
+  update_customer_product_form = ""
+  customer_product_id = ''
+  customer_account_id = ''
+  customer_id_number = ''
+  add_customer_product_form = ''
 
 
 class UpdateProductData:

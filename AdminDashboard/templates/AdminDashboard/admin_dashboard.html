@@ -38,12 +38,12 @@
             <div class="list-group list-group-flush my-3">
                 <a href="{% url 'AdminDashboard:adminlandingpage'  %}" class="list-group-item list-group-item-action bg-transparent second-text active"><i
                         class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="{% url 'BackOfficeApp:customers'  %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                <a href="{% url 'BackOfficeApp:get_customers'  %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-project-diagram me-2"></i>Customers</a>
     
                 <a href="{% url 'BackOfficeApp:get_product_categories'  %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-chart-line me-2"></i>Products Categories</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                <a href="{% url 'BackOfficeApp:get_all_customers_products'  %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-paperclip me-2"></i>Products</a>
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-shopping-cart me-2"></i>Store Mng</a>

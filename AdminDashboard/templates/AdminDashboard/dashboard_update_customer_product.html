@@ -3,41 +3,38 @@
  <div class="container">
    <div class="row">
      <div class="col-12">
+      
+      <div class="btn-group dropright customers-action-button">
+         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           Action
+         </button>
+         <div class="dropdown-menu">
+           <a class="dropdown-item" href="{% url 'BackOfficeApp:delete_customer_product' product_id=dashboard_session.customer_product_id %}" id="deletecategory">Delete Category</a>
+         </div>
+       </div>
+
       <div class="form-body">
          <div class="row">
            <div class="form-holder">
              <div class="form-content">
                <div class="form-items">
-                 <h3>Add Customer Product</h3>
+                 <h3>Update Customer Product</h3>
                  
-                 <form id = "form1" action="{% url 'BackOfficeApp:addproduct' %}?{{dashboard_session.add_customer_post_form_parameters}}" method ="POST" enctype="multipart/form-data">
+                 <form id = "form1" action="{% url 'BackOfficeApp:update_customer_product' product_id=dashboard_session.customer_product_id %}" method ="POST" enctype="multipart/form-data">
                    
                   {% csrf_token %}
                   <br>
                   
-                  {% for e in dashboard_session.add_product_forms_list %}
-                     <h7>Fill in the product {{forloop.counter}} details below</h7>
-
-                     {% for field in e.productItemForm %}
+                  <h7>Fill in the product details below</h7>
+                  {% for field in dashboard_session.update_customer_product_form %}
                         <div>
                            {{field}}
                            {{field.errors}}
                         </div>
-                     {% endfor %}
-                     {% for field in e.productItemImageForm %}
-                        <div>
-                           {{field}}
-                           {{field.errors}}
-                        </div>
-                     {% endfor %}
-                     <br>
-                     {% if not forloop.last %}
-                        <hr>
-                     {% endif %}
                   {% endfor %}
 
                    <div class="form-button mt-3">
-                     <button id="submit" type="submit" class="btn btn-primary">Add</button>
+                     <button id="submit" type="submit" class="btn btn-primary">Update</button>
                    </div>
                  </form>
                </div>
