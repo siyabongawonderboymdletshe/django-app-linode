@@ -301,6 +301,9 @@ class DashboardSession:
   product_category_id =''
   product_categories = []
   all_customers_products = []
+  all_customers_accounts = []
+  all_account_products = []
+  account_products = []
   update_customer_product_form = ""
   customer_product_id = ''
   customer_account_id = ''

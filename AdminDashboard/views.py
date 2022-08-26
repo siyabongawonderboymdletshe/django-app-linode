@@ -2,13 +2,13 @@ from django.shortcuts import render
 from BackOfficeApp.models import Account, Customer
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import F
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 def filter_customers(filter):
 
     if filter == 'today':
-        date = datetime.now() - timedelta(days = 0)
+        return Account.objects.annotate(first_name=F('customer__first_name'), last_name=F('customer__last_name'), id_number=F('customer__id_number'), gender=F('customer__gender'), home_address=F('customer__home_address'), cell_phone_number=F('customer__cell_phone_number'), email=F('customer__email'), account_id=F('id')).filter(created_at__day = datetime.now().day)
     elif filter == 'yesterday':
         date = datetime.now() - timedelta(days = 1)
     elif filter == '5':

@@ -5,12 +5,10 @@
     Action
   </button>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="{% url 'BackOfficeApp:delete_customer_account' dashboard_session.customer_account_id  %}" id="deletecustomer">Delete Account Only</a>
-    <a class="dropdown-item" href="#">Delete Customer</a>
+    <a class="dropdown-item" href="{% url 'BackOfficeApp:delete_customer_account' dashboard_session.customer_account_id  %}" id="deletecustomer">Delete Account</a>
+    <a class="dropdown-item" href="#">Delete Account</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header">Customer Filters</h6>
-    <a class="dropdown-item" href="#">All customers</a>
-    <a class="dropdown-item" href="#">Only customers with active accounts</a>
+    <h6 class="dropdown-header">Account Filters</h6>
   </div>
 </div>
 
@@ -20,23 +18,15 @@
      <div class="form-holder">
        <div class="form-content">
          <div class="form-items">
-           <h3>Update Customer</h3>
+           <h3>Update Account</h3>
            
            
-           <form id = "update_form" action="{% url 'BackOfficeApp:update_customer' dashboard_session.add_customer_post_form_parameters  %}" method ="POST">
+           <form id = "update_form" action="{% url 'BackOfficeApp:update_customer_account' dashboard_session.customer_account_id  %}" method ="POST">
              
             {% csrf_token %}
             <br>
-            <h7>Fill in the personal details below.</h7>
-            {% for e in dashboard_session.add_customer_form %}
-               <div class="col-md-12">
-                  {{e}}
-               </div>
-               {% if dashboard_session.add_customer_form %}
-                  {{ e.errors }}
-               {% endif %}
-            {% endfor %}
-            <h7>Fill in the loan details below.</h7>
+           
+            <h7>Fill in the account details below.</h7>
             {% for e in dashboard_session.add_account_form %}
                <div class="col-md-12">
                   {{e}}

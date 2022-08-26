@@ -9,7 +9,7 @@
            Action
          </button>
          <div class="dropdown-menu">
-           <a class="dropdown-item" href="{% url 'BackOfficeApp:delete_customer_product' product_id=dashboard_session.customer_product_id %}" id="deletecategory">Delete Category</a>
+           <a class="dropdown-item" href="{% url 'BackOfficeApp:delete_customer_product' dashboard_session.customer_product_id %}" id="deletecategory">Delete Category</a>
          </div>
        </div>
 
@@ -19,12 +19,10 @@
              <div class="form-content">
                <div class="form-items">
                  <h3>Update Customer Product</h3>
-                 
-                 <form id = "form1" action="{% url 'BackOfficeApp:update_customer_product' product_id=dashboard_session.customer_product_id %}" method ="POST" enctype="multipart/form-data">
+                 <form id = "form1" action="{% url 'BackOfficeApp:update_customer_product' dashboard_session.customer_product_id %}" method ="POST" enctype="multipart/form-data">
                    
                   {% csrf_token %}
                   <br>
-                  
                   <h7>Fill in the product details below</h7>
                   {% for field in dashboard_session.update_customer_product_form %}
                         <div>

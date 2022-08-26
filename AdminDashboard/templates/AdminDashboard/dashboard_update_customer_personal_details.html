@@ -5,14 +5,14 @@
     Action
   </button>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="#" id="deletecustomer">Delete Customer</a>
+    <a class="dropdown-item" href="#" id="delete_customer">Delete Customer</a>
+    <a class="dropdown-item" href="{% url 'BackOfficeApp:get_customer_accounts' dashboard_session.customer_id_number  %}" id="customer_account">Customer Account</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header">Customer Filters</h6>
     <a class="dropdown-item" href="#">All customers</a>
     <a class="dropdown-item" href="#">Only customers with active accounts</a>
   </div>
 </div>
-
 
 <div class="form-body">
    <div class="row">
@@ -64,7 +64,7 @@
       }
 
 
-      $('#deletecustomer').click(function(){
+      $('#delete_customer').click(function(){
          $("#deleteconfirmation").modal("show");
       });
 

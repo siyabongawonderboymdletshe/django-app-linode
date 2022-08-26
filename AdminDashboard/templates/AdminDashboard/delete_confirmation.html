@@ -7,10 +7,23 @@
       </div>
       <div class="modal-body">
          <p class ="add_customer_message_class_error">
-            Are you sure you want to delete the selected customer account?
+            Are you sure you want to delete the selected record?
          </p>
+
          <p>
-           <a href="{% url 'BackOfficeApp:delete_customer' id_number=dashboard_session.add_customer_post_form_parameters %}">Yes, I'm sure.</a>
+           {% if dashboard_session.add_customer_message_action_hyperlink_url_parameters %}
+               <span>
+                  <a href="{% url dashboard_session.add_customer_message_action_hyperlink_url dashboard_session.add_customer_message_action_hyperlink_url_parameters %}?{{dashboard_session.add_customer_message_action_hyperlink_url_query_string}}">Yes, I'm sure.</a>
+               </span>
+            {% elif dashboard_session.add_customer_message_action_hyperlink_url_query_string %}
+               <span>
+                  <a href="{% url dashboard_session.add_customer_message_action_hyperlink_url %}?{{dashboard_session.add_customer_message_action_hyperlink_url_query_string}}">Yes, I'm sure.</a>
+               </span>
+            {% else %}
+               <span>
+                  <a href="{% url dashboard_session.add_customer_message_action_hyperlink_url %}">Yes, I'm sure.</a>
+               </span>
+            {% endif %}
          </p>
         
       </div>
