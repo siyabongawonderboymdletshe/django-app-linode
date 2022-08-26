@@ -165,29 +165,20 @@ def update_customer_personal_details(request, id_number):
         dashboard_session_context.add_customer_post_form_parameters = id_number
         dashboard_session_context.customer_id_number = id_number
         if request.POST:
-           
-           #This is for removing unwanted date format, 2022-08-30 00:00:00
-            payment_due_date = request.POST['payment_due_date']
-            payment_due_date  = payment_due_date.replace(' 00:00:00','')
-            _mutable = request.POST._mutable
-            request.POST._mutable = True
-            request.POST['payment_due_date'] = payment_due_date
-            request.POST._mutable = _mutable
-
+        
             customerRegistrationForm = CustomerRegistrationForm(request.POST, use_required_attribute=False)
             dashboard_session_context.add_customer_form = customerRegistrationForm
            
-
-            if customerRegistrationForm.is_valid() and accountRegistrationForm.is_valid():
+            if customerRegistrationForm.is_valid():
                 id = request.POST['id_number']
                 customer = Customer.objects.filter(id_number = id).first()
                 
                 #check if the new id already exists
                 if customer and id == id_number:
                     print('customer and id == id_number : ')
-                    dashboard_session_context = get_dashboard_session_context(message='An account with the same ID number already exists. Choose a different one.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/dashboard_add_customer_product.html',
+                    dashboard_session_context = get_dashboard_session_context(message='An account with the same ID number already exists. Choose a different one.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/dashboard_update_customer_personal_details.html',
                     title='Update Customer', hyperlink_text='here', message_action = 'You can update the customer information ',  hyperlink_url='BackOfficeApp:update_customer', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=id, 
-                    post_form_parameters=id, add_customer_form=customerRegistrationForm, add_account_form=accountRegistrationForm)
+                    post_form_parameters=id, add_customer_form=customerRegistrationForm)
                     
                     return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
 
@@ -195,15 +186,15 @@ def update_customer_personal_details(request, id_number):
                     existing_customer = Customer.objects.filter(id_number = id_number).first()
                     existing_account = Account.objects.select_related('customer').filter(customer__id_number__exact=id_number).first()
                     customerRegistrationForm = CustomerRegistrationForm(request.POST, use_required_attribute=False, instance=existing_customer)
-                    accountRegistrationForm = AccountRegistrationForm(request.POST, use_required_attribute=False, instance=existing_account)
-                    
+                
                     customerRegistrationForm.save()
-                    accountRegistrationForm.save()
-                   
-                    dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/dashboard_update_customer.html',
+                    
+    
+                    dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/dashboard_update_customer_personal_details.html',
                     message='The customer details were successfully updated', message_class='add_customer_message_class_success', message_action='You can view details ', title='Update Customer', hyperlink_text='here.', 
-                    hyperlink_url='BackOfficeApp:update_customer', add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers', hyperlink_url_parameters=id_number, post_form_parameters=id_number)
+                    hyperlink_url='BackOfficeApp:update_customer_personal_details', add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers', hyperlink_url_parameters=id_number, post_form_parameters=id_number)
                     dashboard_session_context.customer_account_id = existing_account.id
+                    dashboard_session_context.customer_id_number = id_number
                     return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
             
             return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
@@ -213,6 +204,7 @@ def update_customer_personal_details(request, id_number):
                     message='The customers you provided does not exist', message_class='add_customer_message_class_error', message_action='You can add a new customer  ', title='Update Customer', hyperlink_text='here.', 
                     hyperlink_url='BackOfficeApp:add_customer', add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers')
             dashboard_session_context.customer_id_number = id_number
+            
             return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
         
     
