@@ -406,7 +406,8 @@ def get_customer_accounts(request, id_number):
     customer = Customer.objects.filter(id_number=id_number).first()
     customerRegistrationForm = CustomerRegistrationForm(use_required_attribute=False)
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/dashboard_customer_accounts_landing_page.html')
-    
+    dashboard_session_context.customer_id_number = id_number
+
     if not customer:
         dashboard_session_context = get_dashboard_session_context(message='Oops! The customer you provided does not exist.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/dashboard_update_customer_personal_details.html',
                 title='Customer Account', add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers', post_form_parameters = id_number)
@@ -467,7 +468,51 @@ def get_accounts(request):
     accounts = Account.objects.all()
     dashboard_session_context.all_customers_accounts = accounts
     return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+def add_customer_account(request, id_number):
+    dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/dashboard_add_customer_account.html', hyperlink_url_parameters=id_number, hyperlink_url='BackOfficeApp:delete_customer_account')
+    
+    dashboard_session_context.customer_id_number = id_number
+    customer = Customer.objects.filter(id_number = id_number).first()
+    accountRegistrationForm = AccountRegistrationForm(use_required_attribute=False)
+    
+    if not customer:
+        dashboard_session_context = get_dashboard_session_context(message=f'The customer with Id number {id_number} does not exist', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/dashboard_add_customer_account.html',
+            title='Add Customer Account', message_action='You can add a new customer ', hyperlink_text='here', hyperlink_url='BackOfficeApp:add_customer', modal_close_url='BackOfficeApp:get_customers')
+        dashboard_session_context.customer_id_number = id_number
+        dashboard_session_context.add_account_form = accountRegistrationForm
+        return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+    
+    if request.POST:
+           #This is for removing unwanted date format, 2022-08-30 00:00:00
+            payment_due_date = request.POST['payment_due_date']
+            payment_due_date  = payment_due_date.replace(' 00:00:00','')
+            _mutable = request.POST._mutable
+            request.POST._mutable = True
+            request.POST['payment_due_date'] = payment_due_date
+            request.POST._mutable = _mutable
 
+            accountRegistrationForm = AccountRegistrationForm(request.POST, use_required_attribute=False)
+            dashboard_session_context.add_account_form = accountRegistrationForm
+
+            if accountRegistrationForm.is_valid():
+                accountRegistrationForm = AccountRegistrationForm(request.POST, use_required_attribute=False)
+                account = accountRegistrationForm.save(commit=False)
+                account.customer = customer
+                account.save()
+                
+                dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/dashboard_add_customer_account.html',
+                message='The account details were successfully added', message_class='add_customer_message_class_success', message_action='You can view details ', title='Add Account', hyperlink_text='here.', 
+                hyperlink_url='BackOfficeApp:update_customer_account', add_account_form = accountRegistrationForm, modal_close_url='BackOfficeApp:get_accounts', hyperlink_url_parameters=account.id)
+                dashboard_session_context.customer_id_number = id_number
+                return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+
+            return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+
+
+    accountRegistrationForm = AccountRegistrationForm(use_required_attribute=False)
+    dashboard_session_context.add_account_form = accountRegistrationForm
+
+    return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
 
 #AccountItem
 def get_account_product(request, account_id):

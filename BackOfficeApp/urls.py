@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_accounts, delete_customer_account, get_customer_accounts, add_customer_product, update_customer_account, get_account_product, delete_customer_product, update_customer_product, get_all_customers_products, update_product_category, delete_product_category, get_product_categories, add_product_category, get_customers, add_customer, update_customer_personal_details, delete_customer, add_account_product, update_account_product
+from .views import add_customer_account, get_accounts, delete_customer_account, get_customer_accounts, add_customer_product, update_customer_account, get_account_product, delete_customer_product, update_customer_product, get_all_customers_products, update_product_category, delete_product_category, get_product_categories, add_product_category, get_customers, add_customer, update_customer_personal_details, delete_customer, add_account_product, update_account_product
 
 
 app_name = 'BackOfficeApp'
@@ -35,6 +35,8 @@ urlpatterns = [
     path('accountproduct/<int:account_id>', view=get_account_product, name='get_account_product'),
     path('deletecustomeraccount/<int:account_id>', view=delete_customer_account, name='delete_customer_account'),
     path('accounts', view=get_accounts, name='get_accounts'),
+    path('addcustomeraccount/<int:id_number>', view=add_customer_account, name='add_customer_account'),
+    
     
 
 ]

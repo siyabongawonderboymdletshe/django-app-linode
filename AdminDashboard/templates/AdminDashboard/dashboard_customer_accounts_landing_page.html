@@ -6,7 +6,7 @@
     Action
   </button>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="{% url 'BackOfficeApp:add_customer_product'  %}">Add Product</a>
+    <a class="dropdown-item" href="{% url 'BackOfficeApp:add_customer_account' id_number=dashboard_session.customer_id_number%}">Add Account</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header">Accounts Filters</h6>
   </div>
