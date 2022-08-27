@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import ProductRequest, ProductItemImage, Customer, Account, AccountItem, Catalogue, CustomerAsset, ProductCategory, ProductItem
+from BackOfficeApp.models.account.models import *
+from BackOfficeApp.models.product.models import *
+from BackOfficeApp.models.customer.models import *
+from BackOfficeApp.models.catalogue.models import *
 
 class Customerdmin(admin.ModelAdmin):
     model: Customer

@@ -1,11 +1,20 @@
 from django.urls import path
-from .views import add_customer_account, get_accounts, delete_customer_account, get_customer_accounts, add_customer_product, update_customer_account, get_account_product, delete_customer_product, update_customer_product, get_all_customers_products, update_product_category, delete_product_category, get_product_categories, add_product_category, get_customers, add_customer, update_customer_personal_details, delete_customer, add_account_product, update_account_product
-
+from BackOfficeApp.views.customers.views import *
 
 app_name = 'BackOfficeApp'
 
 urlpatterns = [
    
+
+    path('allcustomers', view=get_all_customers, name='get_all_customers'), 
+    path('addcustomer', view=add_customer, name='add_customer'),
+    path('updatecustomer/<int:id_number>', view=update_customer_personal_details, name='update_customer_personal_details'),
+    path('deletecustomer/<int:id_number>', view=delete_customer, name='delete_customer')  
+
+]
+
+
+"""
     path('customers', view = get_customers, name='get_customers'),
     path('addcustomer', view=add_customer, name='add_customer'),
     path('updatecustomer/<int:id_number>', view=update_customer_personal_details, name='update_customer_personal_details'),
@@ -37,6 +46,4 @@ urlpatterns = [
     path('accounts', view=get_accounts, name='get_accounts'),
     path('addcustomeraccount/<int:id_number>', view=add_customer_account, name='add_customer_account'),
     
-    
-
-]
+   """

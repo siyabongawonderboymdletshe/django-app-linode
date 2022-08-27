@@ -1,0 +1,61 @@
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Customers</h1>
+   
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">All Customers</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="50">#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>ID Number</th>
+                            <th>Gender</th>
+                            <th>Home Address</th>
+                            <th>Cell Number</th>
+                            <th>AccountId</th>
+                            <th>Loan Amount</th>
+                            <th>Rate</th>
+                            <th>Date Created</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for customer in dashboard_session.all_customers %}
+                            <tr>
+                                <th scope="row"> <a href="{% url 'BackOfficeApp:update_customer_personal_details' id_number=customer.id_number %}">{{forloop.counter}}</a></th>
+                                <td>{{customer.first_name}}</td>
+                                <td>{{customer.last_name}}</td>
+                                <td>{{customer.id_number}}</td>
+                                <td>{{customer.gender}}</td>
+                                <td>{{customer.home_address}}</td>
+                                <td>{{customer.cell_phone_number}}</td>
+                            
+                                <td>{{customer.account_id}}</td>
+                                {% if customer.loan_amount == None %}
+                                <td>{{customer.loan_amount}}</td>
+                                {% else %}
+                                <td>R{{customer.loan_amount}}</td>
+                                {% endif %}
+                                <td>{{customer.rate}}</td>
+                                <td>{{customer.created_at}}</td>
+                            
+                            </tr>
+                        {% endfor %}
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
