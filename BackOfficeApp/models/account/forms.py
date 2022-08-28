@@ -10,13 +10,13 @@ class AccountRegistrationForm(forms.ModelForm):
     }
     widgets = {
             'loan_amount': forms.NumberInput(
-                attrs={'placeholder': 'Enter Loan Amount Here' }),
+                attrs={'placeholder': 'Enter Loan Amount Here','class':'form-control form-control-user' }),
             'rate': forms.NumberInput(
-                attrs={'placeholder': 'Enter Rate Here' }),
+                attrs={'placeholder': 'Enter Rate Here','class':'form-control form-control-user' }),
             'number_of_products': forms.NumberInput(
-                attrs={'placeholder': 'Enter Number Of Products Here' }),
+                attrs={'placeholder': 'Enter Number Of Products Here','class':'form-control form-control-user' }),
             'payment_due_date': forms.DateTimeInput(
-                attrs={'placeholder': 'Select Payment Due Date Here',"onfocus":"this.type='date'",
+                attrs={'placeholder': 'Select Payment Due Date Here','class':'form-control form-control-user',"onfocus":"this.type='date'",
                 "onblur":"this.type='text'"  
                 })  
         }

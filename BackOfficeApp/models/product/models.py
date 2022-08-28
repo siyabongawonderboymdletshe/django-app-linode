@@ -1,6 +1,11 @@
 from django.db import models
-from BackOfficeApp.utils.product.product import content_file_name
 import os
+
+def content_file_name(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s_%s_%s_%s.%s" % (instance.product_item.name, instance.product_item.year,'productItemId', instance.product_item.id, ext)
+    return os.path.join('product_images', filename)
+
 
 class ProductCategory(models.Model):
   name = models.CharField("Category", max_length=150, blank=False)
@@ -35,5 +40,10 @@ class ProductRequest(models.Model):
   
   def __str__(self):
     return f'Hash = [{self.hash_value}], Account = {self.account_id}'
+
+class UpdateProductData:
+    is_product_update=False
+    product_item_list = ''
+    product_item_image_list = ''
 
     

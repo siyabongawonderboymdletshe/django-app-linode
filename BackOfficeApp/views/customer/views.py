@@ -26,7 +26,7 @@ def add_customer(request):
     accountRegistrationForm = AccountRegistrationForm(use_required_attribute=False)
     
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/customer/add_customer.html',
-    title='Customer Registration', add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm)
+    title='Add Customer', add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm)
 
     if request.POST:
         customerRegistrationForm = CustomerRegistrationForm(request.POST, use_required_attribute=False)
@@ -43,17 +43,17 @@ def add_customer(request):
                 account.customer = customer
                 account.save()
                 
-                dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/dashboard_customer_registration.html',
+                dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/customer/add_customer.html',
                 message='The customer was successfully added!', message_class='add_customer_message_class_success', message_action='You can now add the customer product item', title='Customer Registration', hyperlink_text='here.', 
-                hyperlink_url='BackOfficeApp:add_account_product', query_string=f'account_id={account.id}', add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers')
+                hyperlink_url='BackOfficeApp:add_account_product', query_string=f'account_id={account.id}', add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_all_customers')
                 
             else:
-                dashboard_session_context = get_dashboard_session_context('AdminDashboard/dashboard_customer_registration.html',
-                message='An account with the same ID number already exists. Choose a different one.', message_class='add_customer_message_class_error', message_action='You can update the customer information ', title='Customer Registration', hyperlink_text='here.', 
-                hyperlink_url='BackOfficeApp:update_customer_personal_details', hyperlink_url_parameters=id, add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers')
+                dashboard_session_context = get_dashboard_session_context('AdminDashboard/customer/update_customer.html',
+                message='An account with the same ID number already exists. Choose a different one.', message_class='add_customer_message_class_error', message_action='You can update the customer information ', title='Add Customer', hyperlink_text='here.', 
+                hyperlink_url='BackOfficeApp:update_customer_personal_details', hyperlink_url_parameters=id, add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_all_customers')
                 
 
-    return render (request, 'AdminDashboard/customer/add_customer.html')
+    return render (request, 'AdminDashboard/customer/add_customer.html', {'dashboard_session': dashboard_session_context})
 
 def update_customer_personal_details(request, id_number):
     #try:
@@ -78,7 +78,7 @@ def update_customer_personal_details(request, id_number):
                     title='Update Customer', hyperlink_text='here', message_action = 'You can update the customer information ',  hyperlink_url='BackOfficeApp:update_customer', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=id, 
                     post_form_parameters=id, add_customer_form=customerRegistrationForm)
                     
-                    return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+                    return render (request, 'AdminDashboard/customer/update_customer.html', {'dashboard_session': dashboard_session_context})
 
                 else:
                     existing_customer = Customer.objects.filter(id_number = id_number).first()
@@ -90,27 +90,27 @@ def update_customer_personal_details(request, id_number):
     
                     dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/dashboard_update_customer_personal_details.html',
                     message='The customer details were successfully updated', message_class='add_customer_message_class_success', message_action='You can view details ', title='Update Customer', hyperlink_text='here.', 
-                    hyperlink_url='BackOfficeApp:update_customer_personal_details', add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers', hyperlink_url_parameters=id_number, post_form_parameters=id_number)
+                    hyperlink_url='BackOfficeApp:update_customer_personal_details', add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_all_customers', hyperlink_url_parameters=id_number, post_form_parameters=id_number)
                     dashboard_session_context.customer_account_id = existing_account.id
                     dashboard_session_context.customer_id_number = id_number
-                    return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+                    return render (request, 'AdminDashboard/customer/update_customer.html', {'dashboard_session': dashboard_session_context})
             
-            return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+            return render (request, 'AdminDashboard/customer/update_customer.html', {'dashboard_session': dashboard_session_context})
         customer = Customer.objects.filter(id_number=id_number).first()
         if not customer:
             dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/dashboard_update_customer_personal_details.html',
                     message='The customers you provided does not exist', message_class='add_customer_message_class_error', message_action='You can add a new customer  ', title='Update Customer', hyperlink_text='here.', 
-                    hyperlink_url='BackOfficeApp:add_customer', add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_customers')
+                    hyperlink_url='BackOfficeApp:add_customer', add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_all_customers')
             dashboard_session_context.customer_id_number = id_number
             
-            return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+            return render (request, 'AdminDashboard/customer/update_customer.html', {'dashboard_session': dashboard_session_context})
         
     
         customerRegistrationForm = CustomerRegistrationForm(customer.__dict__, use_required_attribute=False)
 
         dashboard_session_context.add_customer_form = customerRegistrationForm
 
-        return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+        return render (request, 'AdminDashboard/customer/update_customer.html', {'dashboard_session': dashboard_session_context})
         
     #except Exception as e:
        # print(e)
@@ -137,16 +137,16 @@ def delete_customer(request, id_number):
     
         if not customer:
             dashboard_session_context = get_dashboard_session_context(message='Oops! The customer you provided does not exist.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/dashboard_update_customer_personal_details.html',
-                title='Delete Customer', add_customer_form = customerRegistrationForm, add_account_form = accountRegistrationForm, modal_close_url='BackOfficeApp:get_customers', post_form_parameters = id_number)
+                title='Delete Customer', add_customer_form = customerRegistrationForm, add_account_form = accountRegistrationForm, modal_close_url='BackOfficeApp:get_all_customers', post_form_parameters = id_number)
             dashboard_session_context.customer_id_number = id_number
-            return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+            return render (request, 'AdminDashboard/customer/update_customer.html', {'dashboard_session': dashboard_session_context})
 
         customer.delete()
         dashboard_session_context.add_customer_message  = 'The customer was successfully deleted!'
         dashboard_session_context.add_customer_message_class  = 'add_customer_message_class_success'
-        dashboard_session_context.modal_close_url = 'BackOfficeApp:get_customers'
+        dashboard_session_context.modal_close_url = 'BackOfficeApp:get_all_customers'
         
-        return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session_context})
+        return render (request, 'AdminDashboard/customer/update_customer.html', {'dashboard_session': dashboard_session_context})
     #except Exception as e:
        # print(e)
 

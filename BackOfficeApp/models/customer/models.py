@@ -21,9 +21,6 @@ class Customer(models.Model):
     return f'{self.first_name} {self.last_name}'
 
 
-  def __str__(self):
-    return f'{self.id}, {self.year}, {self.name}, {self.serial_number}'
-
   
 class CustomerAsset(models.Model):
   customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

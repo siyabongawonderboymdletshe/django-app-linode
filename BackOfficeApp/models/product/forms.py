@@ -12,17 +12,17 @@ class ProductItemForm(forms.ModelForm):
    
     widgets = {
             'name': forms.TextInput(
-                attrs={'placeholder': 'Enter Name Here' }),
+                attrs={'placeholder': 'Enter Name Here', 'class':'form-control form-control-user' }),
             'serial_number': forms.TextInput(
-                attrs={'placeholder': 'Enter Serial Number Here'}),
+                attrs={'placeholder': 'Enter Serial Number Here', 'class':'form-control form-control-user'}),
             'year': forms.NumberInput(
-                attrs={'placeholder': 'Enter Year Here'}),
+                attrs={'placeholder': 'Enter Year Here', 'class':'form-control form-control-user'}),
             'description': forms.Textarea(
                 attrs={'placeholder': 'Enter Description Here', 'class': 'form-text-area'}),
             'category': forms.Select(
                 attrs={'placeholder': 'Select Category Here', 'class': 'form-category'}),
             'market_value': forms.NumberInput(
-                attrs={'placeholder': 'Enter Market Value Here' }),
+                attrs={'placeholder': 'Enter Market Value Here', 'class':'form-control form-control-user' }),
             
     }
     error_messages = {
@@ -55,7 +55,7 @@ class ProductItemImageForm(forms.ModelForm):
     }
     widgets = {
             'image': forms.FileInput(
-                attrs={'placeholder': 'Select Product Image Here', 'class':'custom-file-input'} ),
+                attrs={'placeholder': 'Select Product Image Here', 'class':'custom-file-input1'} ),
     }
     error_messages = {
             'image': {
@@ -69,7 +69,7 @@ class ProductCategoryForm(forms.ModelForm):
     fields = "__all__"
     widgets = {
             'name': forms.TextInput(
-                attrs={'placeholder': 'Enter Name Here' }),
+                attrs={'placeholder': 'Enter Name Here' , 'class': 'form-category form-control form-control-user' }),
         }
     error_messages = {
             'name': {

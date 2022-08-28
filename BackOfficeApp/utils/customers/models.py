@@ -36,3 +36,6 @@ class DashboardSession:
   customer_account_id = ''
   customer_id_number = ''
   add_customer_product_form = ''
+  number_of_products = ''
+  keep_product_image_form = ''
+  keep_product_image = ''

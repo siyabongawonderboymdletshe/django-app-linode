@@ -18,7 +18,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link rel="stylesheet" href="{% static 'AdminDashboard/css/sb-admin-2.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'AdminDashboard/css/sb-admin-2.css' %}"/>
 
 </head>
 
@@ -43,7 +43,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{% url 'AdminDashboard:admin_dashboard_landing_page'  %}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -80,22 +80,22 @@
                 <div id="accounts_menu" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Options:</h6>
-                        <a class="collapse-item" href="buttons.html">Show All Customers</a>
-                        <a class="collapse-item" href="cards.html">Add New Customer</a>
+                        <a class="collapse-item" href="{% url 'BackOfficeApp:get_all_accounts'  %}">Show All Accounts</a>
                     </div>
                 </div>
 
                 <!-- Products -->
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accounts_menu"
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#products_menu"
                 aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-product"></i>
                 <span>Products</span>
                </a>
-                <div id="accounts_menu" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="products_menu" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Options:</h6>
-                        <a class="collapse-item" href="buttons.html">Show All Customers</a>
-                        <a class="collapse-item" href="cards.html">Add New Customer</a>
+                        <a class="collapse-item" href="{% url 'BackOfficeApp:get_all_customers_products'  %}">Show All Products</a>
+                        <a class="collapse-item" href="{% url 'BackOfficeApp:add_customer_product'  %}">Add New Product</a>
+                        <a class="collapse-item" href="{% url 'BackOfficeApp:get_product_categories'  %}">Show Product Categories</a>
                     </div>
                 </div>
 
