@@ -24,8 +24,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('AuctionApp/', include('AuctionApp.urls')),
-    #path('', view=items, name='AuctionAppItems'),
-    #path('dashboard', include('AdminDashboard.urls')),
     path('backoffice/', include('BackOfficeApp.urls')),
     path('', include('AdminDashboard.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

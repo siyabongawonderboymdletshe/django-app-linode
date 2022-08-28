@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MG Admin - Login</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'AdminDashboard/vendor/fontawesome-free/css/all.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="{% static 'AdminDashboard/css/sb-admin-2.css' %}"/>
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+        
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block add_customer_form_image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h2>Add Product</h2>
+                                    </div>
+                                    <br>
+                                    <form class="user"  action="{% url 'BackOfficeApp:add_customer_product' %}" method ="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {% for e in dashboard_session.add_customer_product_form %}
+                                            <div class="form-group">
+                                                {{e}}
+                                                {% if dashboard_session.add_customer_product_form %}
+                                                {{ e.errors }}
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                        {% for e in dashboard_session.add_product_image_form %}
+                                            <div class="form-group">
+                                                {{e}}
+                                                {% if dashboard_session.add_product_image_form %}
+                                                {{ e.errors }}
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                        <br>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value= "Add Product">
+                                    </form>
+                                    <br> 
+                                   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% if dashboard_session.add_customer_message  %}
+          {% include  'AdminDashboard/product/product_modal.html' %}
+        {% endif %}
+    </div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        $('#id_category option:contains("---------")').text('Select Category Here');
+        
+        var extradata = "{{ dashboard_session.add_customer_message }}";
+        if(extradata && extradata.length > 0){
+            $("#myModal").modal("show");
+        }
+    })
+</script>
+
+</html>

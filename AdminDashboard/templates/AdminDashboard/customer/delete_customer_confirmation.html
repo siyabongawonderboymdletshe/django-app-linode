@@ -1,0 +1,23 @@
+<div class="modal fade" id="delete_confirmation" role="dialog">
+   <div class="modal-dialog">
+   
+   <!-- Modal content-->
+   <div class="modal-content">
+      <div class="modal-header dashboard-modal-header">
+         <h2 class="modal-title">Delete Customer</h2>
+      </div>
+      <div class="modal-body">
+         <p class ="add_customer_message_class_error">
+            Are you sure you want to delete the selected record?
+         </p>
+         <p class ="add_customer_message_class_error">
+            <a href="{% url 'BackOfficeApp:delete_customer' dashboard_session.customer_id_number %}">Yes, I'm sure.</a>
+         </p>
+      </div>
+      <div class="modal-footer">
+         <a href="#">Close</a>
+      </div>
+   </div>
+   
+   </div>
+</div>

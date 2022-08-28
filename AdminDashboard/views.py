@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from BackOfficeApp.models import Account, Customer
+from BackOfficeApp.models.account.models import Account
+from BackOfficeApp.models.customer.models import Customer
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import F
 from datetime import datetime, timedelta, date
@@ -45,11 +46,11 @@ def admin_dashboard(request):
 
 
     dashboard_session = {
-        'display_template' : 'AdminDashboard/dashboard_landing_page.html',
+        'display_template' : 'AdminDashboard/landing_page/content.html',
         'customers' : customers_list,
         'sales': customers,
         'number_of_customers': number_of_customers,
         'number_of_sales': number_of_sales,
         'filtered_result': True
     }
-    return render (request, 'AdminDashboard/admin_dashboard.html', {'dashboard_session': dashboard_session})
+    return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session})

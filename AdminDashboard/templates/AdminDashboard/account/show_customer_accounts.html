@@ -1,0 +1,49 @@
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Accounts</h1>
+   
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">All Accounts</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="50">#</th>
+                            <th>Customer Id</th>
+                            <th>Account Id</th>
+                            <th>Amount</th>
+                            <th>Rate</th>
+                            <th>Created Date</th>
+                            <th>No. Of Products</th>
+                            <th>Payment Due Date</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for account in dashboard_session.all_customers_accounts %}
+                        <tr>
+                            <th> <a href="{% url 'BackOfficeApp:update_customer_account' account_id=account.id %}">{{forloop.counter}}</a></th>
+                            <td><a href="{% url 'BackOfficeApp:update_customer_personal_details' id_number=account.customer.id_number %}">{{account.customer.id}}</a></td>
+                            <td>{{account.id}}</td>
+                            <td>{{account.loan_amount}}</td>
+                            <td>{{account.rate}}</td>
+                            <td>{{account.created_at}}</td>
+                            <td><a href="{% url 'BackOfficeApp:get_account_product' account_id=account.id %}">{{account.number_of_products}}</a></td>
+                            <td>{{account.payment_due_date}}</td>
+                        </tr>
+                        {% endfor %}
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
