@@ -46,3 +46,5 @@ admin.site.register(ProductCategory)
 admin.site.register(ProductItem, ProductItemAdmin)
 admin.site.register(ProductItemImage)
 admin.site.register(ProductRequest, ProductRequestAdmin)
+
+admin.site.register(AccountDemo)
