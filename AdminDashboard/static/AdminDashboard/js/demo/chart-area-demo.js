@@ -29,6 +29,9 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
+var chart_data = "{{ dashboard_session.chart_data }}";
+chart_data = JSON.parse(chart_data);
+alert(chart_data)
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {

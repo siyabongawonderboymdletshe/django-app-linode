@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from BackOfficeApp.models.account.models import Account
+from BackOfficeApp.models.account.models import Account, AccountDemo, AccountItem
 from BackOfficeApp.models.customer.models import Customer
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import F
 from datetime import datetime, timedelta, date
+from django.db.models.functions import TruncMonth
+from django.db.models import Count, Sum
 
 
 def filter_customers(filter):
@@ -30,6 +32,25 @@ def filter_customers(filter):
         
     return Account.objects.annotate(first_name=F('customer__first_name'), last_name=F('customer__last_name'), id_number=F('customer__id_number'), gender=F('customer__gender'), home_address=F('customer__home_address'), cell_phone_number=F('customer__cell_phone_number'), email=F('customer__email'), account_id=F('id')).filter(created_at__gte = date)
 
+
+
+
+def get_chart_data(data = ''):
+        
+    monthly_sales = [0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0]
+    list  = []
+
+    #items = AccountItem.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(total=sum('account__loan_amount')).values('month', 'total') 
+    items = Account.objects.filter().values('created_at__month').order_by('created_at__month').annotate(sum=Sum('loan_amount'))
+    
+    for i in items:
+     #monthly_sales[(i['month'].month)-1] = i['total']
+     monthly_sales[i['created_at__month']-1] = float(i['sum'])
+     
+        
+    return monthly_sales 
+
+
 def admin_dashboard(request):
    
     customers = filter_customers(request.GET.get('filter', '30')).values()
@@ -51,6 +72,7 @@ def admin_dashboard(request):
         'sales': customers,
         'number_of_customers': number_of_customers,
         'number_of_sales': number_of_sales,
-        'filtered_result': True
+        'filtered_result': True,
+        'chart_data': get_chart_data()
     }
     return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session})
