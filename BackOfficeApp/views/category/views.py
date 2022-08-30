@@ -72,4 +72,4 @@ def get_product_categories(request):
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/category/show_product_category.html')
     dashboard_session_context.product_categories = ProductCategory.objects.all()
 
-    return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
+    return render (request, 'AdminDashboard/landing_page/s``idebar.html', {'dashboard_session': dashboard_session_context})

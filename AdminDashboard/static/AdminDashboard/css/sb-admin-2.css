@@ -11370,7 +11370,7 @@ body.sidebar-toggled footer.sticky-footer {
 .border-left-orange {
   border-left: 0.25rem solid #f47c1b !important;
 }
-.sidebar-text{
+.sidebar-text, .btn-warning{
   color: #fff !important;
   font-weight: 700;
 }

@@ -42,8 +42,11 @@
                                 <td>{{customer.gender}}</td>
                                 <td>{{customer.home_address}}</td>
                                 <td>{{customer.cell_phone_number}}</td>
-                            
-                                <td>{{customer.account_id}}</td>
+                                {% if customer.account_id == None %}
+                                    <td>{{customer.account_id}}</td>
+                                {% else %}
+                                    <td> <a href="{% url 'BackOfficeApp:update_customer_account' account_id=customer.account_id %}">{{customer.account_id}}</a></th>
+                                {% endif %}
                                 {% if customer.loan_amount == None %}
                                 <td>{{customer.loan_amount}}</td>
                                 {% else %}
@@ -51,7 +54,6 @@
                                 {% endif %}
                                 <td>{{customer.rate}}</td>
                                 <td>{{customer.created_at}}</td>
-                            
                             </tr>
                         {% endfor %}
                        
