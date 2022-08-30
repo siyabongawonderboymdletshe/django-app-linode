@@ -52,7 +52,7 @@
                                         <h2>Add Customer Asset</h2>
                                     </div>
                                     <br>
-                                    <form class="user"  action="{% url 'BackOfficeApp:add_account_product' %}?{{dashboard_session.add_customer_post_form_parameters}}" method ="POST">
+                                    <form class="user"  action="{% url 'BackOfficeApp:add_account_product' %}?{{dashboard_session.add_customer_post_form_parameters}}" method ="POST" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <h5>This account requires {{dashboard_session.number_of_products}} assets.</h5>
                                         <br>
