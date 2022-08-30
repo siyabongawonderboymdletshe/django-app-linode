@@ -26,7 +26,7 @@ def is_a_duplicate_request(request):
         return False
     return True
 
-def get_products_forms(request, number_of_products=1, is_post_form =False, update_product_data ='', use_prefix = True ):
+def get_products_forms(request, number_of_products=1, is_post_form =False, update_product_data ='', use_prefix = False ):
     add_product_forms_list = []
     
     if update_product_data and update_product_data.is_product_update:
@@ -61,8 +61,8 @@ def get_products_forms(request, number_of_products=1, is_post_form =False, updat
     while i <= number_of_products:     
         if request.POST and is_post_form:
             productItemForm = ProductItemForm(request.POST, use_required_attribute=False, prefix = f'productItemForm{i}' if use_prefix else '')
-            productItemImageForm = ProductItemImageForm(request.POST, request.FILES, use_required_attribute=False, prefix = f'productItemImageForm{i}') 
-            keepProductImage = KeepProductImageForm(request.POST, use_required_attribute=False, prefix = f'updateProductImageForm{i}') 
+            productItemImageForm = ProductItemImageForm(request.POST, request.FILES, use_required_attribute=False, prefix = f'productItemImageForm{i}' if use_prefix else '') 
+            keepProductImage = KeepProductImageForm(request.POST, use_required_attribute=False, prefix = f'updateProductImageForm{i}' if use_prefix else '') 
         else:
             productItemForm = ProductItemForm(use_required_attribute=False, prefix = f'productItemForm{i}')
             productItemImageForm = ProductItemImageForm(use_required_attribute=False, prefix = f'productItemImageForm{i}')
@@ -75,7 +75,7 @@ def get_products_forms(request, number_of_products=1, is_post_form =False, updat
         }
         add_product_forms_list.append(list)
         i += 1
-        
+    #print(add_product_forms_list)
     return add_product_forms_list
 
 def save_post_update_product_form(request, account_items):
@@ -151,6 +151,7 @@ def add_account_product(request):
     title='Add Customer Product', post_form_parameters = f'account_id={account_id}&number_of_products={number_of_products}')
    
     dashboard_session_context.add_product_forms_list = get_products_forms(request, number_of_products if number_of_products > 0 else 1)
+    #print(dashboard_session_context.add_product_forms_list)
     dashboard_session_context.number_of_products = number_of_products
     if not account:
         list =  dashboard_session_context.add_product_forms_list
@@ -169,13 +170,14 @@ def add_account_product(request):
            
             return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
         
-        dashboard_session_context.add_product_forms_list = get_products_forms(request, number_of_products, True)
+        dashboard_session_context.add_product_forms_list = get_products_forms(request, number_of_products , is_post_form=True, use_prefix=True)
         all_forms_are_valid = True
         for form in dashboard_session_context.add_product_forms_list:
+            
             if not form['productItemForm'].is_valid()  or not form['productItemImageForm'].is_valid():
                 all_forms_are_valid = False
                 break
-
+       
         if all_forms_are_valid:
             account = Account.objects.select_related('customer').get(id = account_id)
             customer = account.customer
@@ -187,9 +189,9 @@ def add_account_product(request):
                 account_item = AccountItem(account  = account, created_at = account.created_at, updated_at =account.created_at)
                 account_item.save()
                 for form in dashboard_session_context.add_product_forms_list:
-                    
+                    print(form)
                     product_item = form['productItemForm'].save()
-                    print()
+                    
                     customer_asset = CustomerAsset(customer = customer, product_item = product_item)
                     customer_asset.save()
                     
@@ -205,11 +207,11 @@ def add_account_product(request):
                 account_item.save()
                 
                 dashboard_session_context = get_dashboard_session_context(message='The customer asset was successfully added!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/account/add_account_products.html',
-                title='Add Customer Asset', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers')
+                title='Add Customer Asset', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:get_account_product', modal_close_url='BackOfficeApp:get_all_customers')
                 
                 dashboard_session_context.add_product_forms_list = get_products_forms(request, number_of_products)
                 dashboard_session_context.number_of_products = number_of_products
-                dashboard_session_context.add_customer_message_action_hyperlink_url_parameters = product_item.id
+                dashboard_session_context.add_customer_message_action_hyperlink_url_parameters = account_id
     return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
 def get_customer_accounts(request, id_number):
     customer = Customer.objects.filter(id_number=id_number).first()
@@ -319,7 +321,6 @@ def add_customer_account(request, id_number):
     accountRegistrationForm = AccountRegistrationForm(use_required_attribute=False)
     dashboard_session_context.add_account_form = accountRegistrationForm
     return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
-   
 def add_customer_account(request):
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/account/add_customer_account.html')
 
@@ -357,13 +358,11 @@ def add_customer_account(request):
 
 
 
-
 #AccountItem
 def get_account_product(request, account_id):
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/account/show_account_products.html')
     account_item = AccountItem.objects.filter(account__id__exact=account_id).first()
-    print(account_item)   
- 
+   
     if not account_item:
         dashboard_session_context = get_dashboard_session_context(message='Oops! The account does not have any products associated with it.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/account/show_account_products.html',
                 title='Customer Account Product', modal_close_url='BackOfficeApp:get_accounts', message_action='You can add a new product ', hyperlink_text='here',  hyperlink_url='BackOfficeApp:add_account_product', query_string=f'account_id={account_id}')
