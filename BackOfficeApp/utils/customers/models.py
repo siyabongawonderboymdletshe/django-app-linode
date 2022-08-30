@@ -41,3 +41,5 @@ class DashboardSession:
   keep_product_image = ''
   add_login_form = ''
   url_query_string = ''
+  link_asset_with_customer_form = ''
+  customer_asset_form = []

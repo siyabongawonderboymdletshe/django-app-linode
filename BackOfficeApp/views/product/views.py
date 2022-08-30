@@ -2,6 +2,8 @@ from django.shortcuts import render
 from BackOfficeApp.utils.customers.customer import get_dashboard_session_context
 from BackOfficeApp.models.product.models import *
 from BackOfficeApp.models.product.forms import *
+from BackOfficeApp.models.customer.forms import *
+
 
 #Products
 def get_all_customers_products(request):
@@ -98,26 +100,56 @@ def delete_customer_product(request, product_id):
     return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
 def add_customer_product(request):
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/product/add_customer_product.html')
-    productItemForm = ProductItemForm(use_required_attribute=False)
-    productItemImageForm = ProductItemImageForm(use_required_attribute=False)
-    dashboard_session_context.add_customer_product_form = productItemForm
-    dashboard_session_context.add_product_image_form= productItemImageForm
+    product_item_form = ProductItemForm(use_required_attribute=False)
+    product_item_image_form = ProductItemImageForm(use_required_attribute=False)
+    link_asset_form= LinkProductWithCustomerForm(use_required_attribute=False)
+    customer_asset_form = CustomerAssetForm(use_required_attribute=False)
+    
+
+    dashboard_session_context.add_customer_product_form = product_item_form
+    dashboard_session_context.add_product_image_form= product_item_image_form
+    dashboard_session_context.link_asset_with_customer_form= link_asset_form
+    dashboard_session_context.customer_asset_form = customer_asset_form
 
     if request.POST:
-        productItemForm = ProductItemForm(request.POST, use_required_attribute=False)
-        productItemImageForm = ProductItemImageForm(request.POST, request.FILES, use_required_attribute=False)
-        dashboard_session_context.add_customer_product_form = productItemForm
-        dashboard_session_context.add_product_image_form= productItemImageForm
-        if productItemForm.is_valid() and productItemImageForm.is_valid() :
-            item = productItemForm.save()
-            image = productItemImageForm.save(commit=False)
+        product_item_form = ProductItemForm(request.POST, use_required_attribute=False)
+        product_item_image_form = ProductItemImageForm(request.POST, request.FILES, use_required_attribute=False)
+        link_asset_form= LinkProductWithCustomerForm(request.POST, use_required_attribute=False)
+        customer_asset_form = CustomerAssetForm(request.POST, use_required_attribute=False)
+        dashboard_session_context.add_customer_product_form = product_item_form
+        dashboard_session_context.add_product_image_form= product_item_image_form
+        dashboard_session_context.link_asset_with_customer_form= link_asset_form
+        dashboard_session_context.customer_asset_form = customer_asset_form
+       
+        all_forms_are_valid = True
+        link_asset = link_asset_form.save(commit=False).link_product_with_customer
+        if not customer_asset_form.is_valid() and link_asset:
+            all_forms_are_valid = False
+        elif not product_item_form.is_valid() and not product_item_image_form.is_valid():
+             all_forms_are_valid = False
+        
+        if all_forms_are_valid:
+            item = product_item_form.save()
+            image = product_item_image_form.save(commit=False)
             image.product_item = item
             image.save()
-            
+
+            if link_asset:
+                asset = customer_asset_form.save(commit=False)
+                customer_asset = CustomerAsset(customer = asset.customer, product_item = item)
+                customer_asset.save()
+
             dashboard_session_context = get_dashboard_session_context(message='The customer asset was successfully added!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/add_customer_product.html',
-                title='Add Customer Asset', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=productItemForm.instance.id)
-            dashboard_session_context.add_customer_product_form = productItemForm
+                title='Add Customer Asset', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=item.id)
+            dashboard_session_context.add_customer_product_form = product_item_form
+            dashboard_session_context.add_product_image_form= product_item_image_form
+            dashboard_session_context.link_asset_with_customer_form = link_asset_form
+            dashboard_session_context.customer_asset_form = customer_asset_form
             return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
+        customer_asset_form = CustomerAssetForm(use_required_attribute=False)
+        link_asset_form= LinkProductWithCustomerForm(use_required_attribute=False)
+        dashboard_session_context.link_asset_with_customer_form= link_asset_form
+        dashboard_session_context.customer_asset_form = customer_asset_form
         return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
     return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
 

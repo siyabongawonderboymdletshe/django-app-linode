@@ -33,6 +33,9 @@ class ProductItemImage(models.Model):
 class KeepProductImage(models.Model):
     keep_image = models.BooleanField()
 
+class LinkProductWithCustomer(models.Model):
+    link_product_with_customer = models.BooleanField()
+
 class ProductRequest(models.Model):
   account_id = models.IntegerField("Account Id", blank= False)
   hash_value = models.CharField("Request Hash", max_length=255)
