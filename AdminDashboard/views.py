@@ -107,6 +107,7 @@ def admin_dashboard(request):
             customers_list.append(c)
 
 
+    data = get_chart_data()
     dashboard_session = {
         'display_template' : 'AdminDashboard/landing_page/content.html',
         'customers' : customers_list,
@@ -114,6 +115,8 @@ def admin_dashboard(request):
         'number_of_customers': number_of_customers,
         'number_of_sales': number_of_sales,
         'filtered_result': True,
-        'chart_data': get_chart_data()
+        'chart_data': data,
+        'monthly_sales' : f'R{data[(datetime.now().month)-1]}',
+        'annual_sales' : f'R{sum(data)}'
     }
     return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session})
