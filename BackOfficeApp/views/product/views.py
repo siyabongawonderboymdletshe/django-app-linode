@@ -102,53 +102,39 @@ def add_customer_product(request):
     dashboard_session_context = get_dashboard_session_context(display_template ='AdminDashboard/product/add_customer_product.html')
     product_item_form = ProductItemForm(use_required_attribute=False)
     product_item_image_form = ProductItemImageForm(use_required_attribute=False)
-    link_asset_form= LinkProductWithCustomerForm(use_required_attribute=False)
     customer_asset_form = CustomerAssetForm(use_required_attribute=False)
     
 
     dashboard_session_context.add_customer_product_form = product_item_form
     dashboard_session_context.add_product_image_form= product_item_image_form
-    dashboard_session_context.link_asset_with_customer_form= link_asset_form
     dashboard_session_context.customer_asset_form = customer_asset_form
 
     if request.POST:
         product_item_form = ProductItemForm(request.POST, use_required_attribute=False)
         product_item_image_form = ProductItemImageForm(request.POST, request.FILES, use_required_attribute=False)
-        link_asset_form= LinkProductWithCustomerForm(request.POST, use_required_attribute=False)
         customer_asset_form = CustomerAssetForm(request.POST, use_required_attribute=False)
         dashboard_session_context.add_customer_product_form = product_item_form
         dashboard_session_context.add_product_image_form= product_item_image_form
-        dashboard_session_context.link_asset_with_customer_form= link_asset_form
         dashboard_session_context.customer_asset_form = customer_asset_form
        
-        all_forms_are_valid = True
-        link_asset = link_asset_form.save(commit=False).link_product_with_customer
-        if not customer_asset_form.is_valid() and link_asset:
-            all_forms_are_valid = False
-        elif not product_item_form.is_valid() and not product_item_image_form.is_valid():
-             all_forms_are_valid = False
-        
-        if all_forms_are_valid:
+        if customer_asset_form.is_valid() and product_item_form.is_valid() and product_item_image_form.is_valid():
+            
             item = product_item_form.save()
             image = product_item_image_form.save(commit=False)
             image.product_item = item
             image.save()
 
-            if link_asset:
-                asset = customer_asset_form.save(commit=False)
-                customer_asset = CustomerAsset(customer = asset.customer, product_item = item)
-                customer_asset.save()
+            asset = customer_asset_form.save(commit=False)
+            customer_asset = CustomerAsset(customer = asset.customer, product_item = item)
+            customer_asset.save()
 
             dashboard_session_context = get_dashboard_session_context(message='The customer asset was successfully added!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/add_customer_product.html',
                 title='Add Customer Asset', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=item.id)
             dashboard_session_context.add_customer_product_form = product_item_form
             dashboard_session_context.add_product_image_form= product_item_image_form
-            dashboard_session_context.link_asset_with_customer_form = link_asset_form
             dashboard_session_context.customer_asset_form = customer_asset_form
             return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
         customer_asset_form = CustomerAssetForm(use_required_attribute=False)
-        link_asset_form= LinkProductWithCustomerForm(use_required_attribute=False)
-        dashboard_session_context.link_asset_with_customer_form= link_asset_form
         dashboard_session_context.customer_asset_form = customer_asset_form
         return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
     return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})

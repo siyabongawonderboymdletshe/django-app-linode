@@ -35,14 +35,6 @@
                                                 {% endif %}
                                             </div>
                                         {% endfor %}
-                                        {% for e in dashboard_session.link_asset_with_customer_form %}
-                                            <div class="form-group">
-                                                <span> {{e}} Link Customer</span>
-                                                {% if dashboard_session.link_asset_with_customer_form %}
-                                                {{ e.errors }}
-                                                {% endif %}
-                                            </div>
-                                        {% endfor %}
                                         {% for e in dashboard_session.customer_asset_form  %}
                                             <div class="form-group">
                                                 {{e}}
@@ -82,16 +74,5 @@
         if(extradata && extradata.length > 0){
             $("#myModal").modal("show");
         }
-
-
-        $('#id_link_product_with_customer').click(function(){
-            var checkedValue = $('#id_link_product_with_customer:checked').val();
-            document.getElementById("id_customer").style.display = "none"; 
-            if(checkedValue){
-                document.getElementById("id_customer").style.display = "block";
-             }
-            
-            
-         });
     })
 </script>

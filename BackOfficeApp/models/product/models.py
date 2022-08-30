@@ -16,8 +16,8 @@ class ProductItem(models.Model):
   name = models.CharField("Name", max_length=150, blank=False)
   year = models.IntegerField("Year", blank= False)
   serial_number = models.CharField("Serial Number", max_length=150, blank=False)
-  category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
   market_value = models.DecimalField("Market Value", max_digits=13, decimal_places=2, blank= False)
+  category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
   description = models.TextField("Description", blank=False, default="")
   
   def __str__(self):

@@ -5,10 +5,10 @@ from BackOfficeApp.models.customer.models import *
 class Account(models.Model):
   loan_amount = models.DecimalField("Loan Amount", max_digits=13, decimal_places=2, blank= False)
   rate = models.DecimalField("Rate", max_digits=5, decimal_places=2, blank= False)
-  created_at = models.DateTimeField("Created Date")
-  customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+  created_at = models.DateTimeField("Created Date", auto_now_add=True)
   number_of_products = models.IntegerField("Number Of Products", blank= False)
   payment_due_date = models.DateField("Payment Due Date", blank= False)
+  customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
   def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()
