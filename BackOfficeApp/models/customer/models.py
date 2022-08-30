@@ -18,7 +18,7 @@ class Customer(models.Model):
         ordering = ['first_name', 'last_name']
 
   def __str__(self):
-    return f'{self.first_name} {self.last_name}'
+    return f'{self.first_name} {self.last_name}, {self.id_number}'
 
 
   
@@ -27,4 +27,4 @@ class CustomerAsset(models.Model):
   product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
 
   def __str__(self):
-    return f'{self.customer} owns {self.product_item}'
+    return f'{self.customer}'

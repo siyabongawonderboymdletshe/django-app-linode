@@ -81,4 +81,9 @@ class KeepProductImageForm(forms.ModelForm):
     class Meta:
         model = KeepProductImage
         fields = "__all__" 
+
+class LinkProductWithCustomerForm(forms.ModelForm):
+    class Meta:
+        model = LinkProductWithCustomer
+        fields = "__all__" 
         

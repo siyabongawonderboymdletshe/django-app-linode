@@ -45,3 +45,17 @@ class CustomerRegistrationForm(forms.ModelForm):
             },
   }
    
+
+class CustomerAssetForm(forms.ModelForm):
+  class Meta:
+    model = CustomerAsset
+    fields =  ('customer',)
+    
+        
+    error_messages = {
+            'customer': {
+                'required':'Customer is required.'
+            }
+
+  }
+   

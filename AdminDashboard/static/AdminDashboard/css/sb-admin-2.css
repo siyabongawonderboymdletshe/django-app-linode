@@ -11392,3 +11392,7 @@ body.sidebar-toggled footer.sticky-footer {
 .line-height-container{
   margin-top: 100px;
 }
+
+#id_customer1{
+  display: none;
+}

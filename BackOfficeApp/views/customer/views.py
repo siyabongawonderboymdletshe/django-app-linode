@@ -47,7 +47,7 @@ def add_customer(request):
                 account.save()
                 
                 dashboard_session_context = get_dashboard_session_context( display_template='AdminDashboard/customer/add_customer.html',
-                message='The customer was successfully added!', message_class='add_customer_message_class_success', message_action='You can now add the customer product item', title='Customer Registration', hyperlink_text='here.', 
+                message='The customer was successfully added!', message_class='add_customer_message_class_success', message_action='You can now add the customer asset', title='Customer Registration', hyperlink_text='here.', 
                 hyperlink_url='BackOfficeApp:add_account_product', query_string=f'account_id={account.id}', add_account_form = accountRegistrationForm, add_customer_form = customerRegistrationForm, modal_close_url='BackOfficeApp:get_all_customers')
                 
             else:

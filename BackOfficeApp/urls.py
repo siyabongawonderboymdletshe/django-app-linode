@@ -23,8 +23,11 @@ urlpatterns = [
     path('deletecustomeraccount/<int:account_id>', view=delete_customer_account, name='delete_customer_account'),
     path('customeraccounts/<int:id_number>', view=get_customer_accounts, name='get_customer_accounts'),
     path('addaccountproduct/', view=add_account_product, name='add_account_product'),
+    path('addcustomeraccount', view=add_customer_account, name='add_customer_account'),
+    #path('addcustomeraccount/<int:id_number>', view=add_customer_account, name='add_customer_account'),
+    
 
-    #Products
+    #Assets
     path('updatecustomerproduct/<int:product_id>', view=update_customer_product, name='update_customer_product'),
     path('deletecustomerproduct/<int:product_id>', view=delete_customer_product, name='delete_customer_product'),
     path('customerproducts', view = get_all_customers_products, name='get_all_customers_products'),

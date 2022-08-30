@@ -28,7 +28,7 @@
                                         {% endfor %}
                                         {% for field in dashboard_session.keep_product_image_form %}
                                             <div class="form-group">
-                                            <span> {{field}} Tick here to keep the existing <a href="{{ MEDIA_URL }}{{dashboard_session.keep_product_image }}">image</a></span>
+                                            <span> {{field}} Keep the existing <a href="{{ MEDIA_URL }}{{dashboard_session.keep_product_image }}">image</a></span>
                                             {{field.errors}}
                                             </div>
                                         {% endfor %}
@@ -40,6 +40,7 @@
                                                 {% endif %}
                                             </div>
                                         {% endfor %}
+                                        
                                         <br>
                                         <input type="submit" class="btn orange-btn-primary btn-user btn-block" value= "Update Asset">
                                     </form>
