@@ -13,7 +13,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h2>Update Product</h2>
+                                        <h2>Update Asset</h2>
                                     </div>
                                     <br>
                                     <form class="user"  action="{% url 'BackOfficeApp:update_customer_product' dashboard_session.customer_product_id  %}" method ="POST" enctype="multipart/form-data">
@@ -41,12 +41,12 @@
                                             </div>
                                         {% endfor %}
                                         <br>
-                                        <input type="submit" class="btn orange-btn-primary btn-user btn-block" value= "Update Product">
+                                        <input type="submit" class="btn orange-btn-primary btn-user btn-block" value= "Update Asset">
                                     </form>
                                     <br> 
                                     <div class="customers-action-button">
                                         <button id="delete_product" type="button" class="btn btn-warning btn-user btn-block">
-                                          Delete Product
+                                          Delete Asset
                                         </button>
                                     </div>
                                 </div>
