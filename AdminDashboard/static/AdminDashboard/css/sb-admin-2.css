@@ -11378,5 +11378,11 @@ body.sidebar-toggled footer.sticky-footer {
 
 #content {
   width: 100%;
-  height: 100%;
+}
+
+
+.bg-gradient-orange {
+  background-color: #f47c1b;
+  background-image: linear-gradient(180deg, #f47c1b 10%, #224abe 100%);
+  background-size: cover;
 }
