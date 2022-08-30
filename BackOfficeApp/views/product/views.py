@@ -19,8 +19,8 @@ def update_customer_product(request, product_id):
         productItemForm = ProductItemForm(use_required_attribute=False)
         productItemImageForm = ProductItemImageForm(use_required_attribute=False)
         keepProductImage = KeepProductImageForm(use_required_attribute=False)
-        dashboard_session_context = get_dashboard_session_context(message=f'The product with Id {product_id} does not exist.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/product/update_account_product.html',
-            title='Update Product', message_action='You can add a new product ', hyperlink_text='here', hyperlink_url='BackOfficeApp:add_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products')
+        dashboard_session_context = get_dashboard_session_context(message=f'The asset with Id {product_id} does not exist.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/product/update_account_product.html',
+            title='Update Asset', message_action='You can add a new asset ', hyperlink_text='here', hyperlink_url='BackOfficeApp:add_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products')
         dashboard_session_context.update_customer_product_form = productItemForm
         dashboard_session_context.add_product_image_form= productItemImageForm
         dashboard_session_context.keep_product_image_form= keepProductImage
@@ -49,8 +49,8 @@ def update_customer_product(request, product_id):
             productItemImageForm.save()
             
 
-            dashboard_session_context = get_dashboard_session_context(message='The customer product was successfully updated!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/update_account_product.html',
-                title='Update Customer Product', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=product_id)
+            dashboard_session_context = get_dashboard_session_context(message='The customer asset was successfully updated!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/update_account_product.html',
+                title='Update Customer Asset', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=product_id)
             dashboard_session_context.customer_product_id = product_id
             dashboard_session_context.update_customer_product_form = productItemForm
             dashboard_session_context.add_product_image_form= productItemImageForm
@@ -82,16 +82,16 @@ def delete_customer_product(request, product_id):
     product = ProductItem.objects.filter(id=product_id).first()
     if not product:
         productItemForm = ProductItemForm(use_required_attribute=False)
-        dashboard_session_context = get_dashboard_session_context(message=f'The product with Id {product_id} does not exist.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/product/update_account_product.html',
-            title='Update Product', message_action='You can add a new product ', hyperlink_text='here', hyperlink_url='BackOfficeApp:add_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products')
+        dashboard_session_context = get_dashboard_session_context(message=f'The asset with Id {product_id} does not exist.', message_class='add_customer_message_class_error',  display_template ='AdminDashboard/product/update_account_product.html',
+            title='Update Asset', message_action='You can add a new asset ', hyperlink_text='here', hyperlink_url='BackOfficeApp:add_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products')
         dashboard_session_context.update_customer_product_form = productItemForm
         dashboard_session_context.customer_product_id = product_id
         return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
     else:
         product.delete()
         productItemForm = ProductItemForm(use_required_attribute=False)
-        dashboard_session_context = get_dashboard_session_context(message=f'The product was successfully deleted', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/update_account_product.html',
-            title='Delete Product',  modal_close_url='BackOfficeApp:get_all_customers_products')
+        dashboard_session_context = get_dashboard_session_context(message=f'The asset was successfully deleted', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/update_account_product.html',
+            title='Delete Asset',  modal_close_url='BackOfficeApp:get_all_customers_products')
         dashboard_session_context.update_customer_product_form = productItemForm
         dashboard_session_context.customer_product_id = product_id
 
@@ -114,8 +114,8 @@ def add_customer_product(request):
             image.product_item = item
             image.save()
             
-            dashboard_session_context = get_dashboard_session_context(message='The customer product was successfully added!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/add_customer_product.html',
-                title='Add Customer Product', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=productItemForm.instance.id)
+            dashboard_session_context = get_dashboard_session_context(message='The customer asset was successfully added!', message_class='add_customer_message_class_success',  display_template ='AdminDashboard/product/add_customer_product.html',
+                title='Add Customer Asset', hyperlink_text='here', message_action = 'You can view details ',  hyperlink_url='BackOfficeApp:update_customer_product', modal_close_url='BackOfficeApp:get_all_customers_products', hyperlink_url_parameters=productItemForm.instance.id)
             dashboard_session_context.add_customer_product_form = productItemForm
             return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})
         return render (request, 'AdminDashboard/landing_page/sidebar.html', {'dashboard_session': dashboard_session_context})

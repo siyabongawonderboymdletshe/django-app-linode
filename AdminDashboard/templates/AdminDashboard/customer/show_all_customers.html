@@ -35,7 +35,7 @@
                     <tbody>
                         {% for customer in dashboard_session.all_customers %}
                             <tr>
-                                <th scope="row"> <a href="{% url 'BackOfficeApp:update_customer_personal_details' id_number=customer.id_number %}">{{forloop.counter}}</a></th>
+                                <th scope="row"> <a href="{% url 'BackOfficeApp:update_customer_personal_details' id_number=customer.id_number %}">{{customer.id}}</a></th>
                                 <td>{{customer.first_name}}</td>
                                 <td>{{customer.last_name}}</td>
                                 <td>{{customer.id_number}}</td>
