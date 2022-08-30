@@ -1,11 +1,16 @@
 from django.shortcuts import render
-from BackOfficeApp.models.account.models import Account, AccountDemo, AccountItem
+from BackOfficeApp.models.account.models import Account
 from BackOfficeApp.models.customer.models import Customer
+from BackOfficeApp.utils.customers.customer import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import F
 from datetime import datetime, timedelta, date
-from django.db.models.functions import TruncMonth
-from django.db.models import Count, Sum
+from django.db.models import Sum
+from django.contrib.admin.views.decorators import staff_member_required
+from AdminDashboard.models.login.models import * 
+from AdminDashboard.models.registration.models import * 
+from django.contrib.auth import authenticate, login
+from django.urls import reverse
 
 
 def filter_customers(filter):
@@ -51,6 +56,42 @@ def get_chart_data(data = ''):
     return monthly_sales 
 
 
+def user_registration(request):
+    dashboard_session_context = DashboardSession()
+    if request.POST:
+        regForm = RegistrationForm(request.POST, use_required_attribute=False)
+        dashboard_session_context.add_login_form = regForm
+        if not regForm.is_valid():
+            return render (request, 'AdminDashboard/landing_page/registration/registration.html', {'dashboard_session': dashboard_session_context})
+        regForm.save()
+        return HttpResponseRedirect(reverse('AdminDashboard:login'))
+        
+    regForm = RegistrationForm(use_required_attribute=False)
+    dashboard_session_context.add_login_form = regForm
+    dashboard_session_context.url_query_string = request.GET.get('next', 'login')
+    
+
+    return render (request, 'AdminDashboard/landing_page/registration/registration.html', {'dashboard_session': dashboard_session_context})
+
+
+def user_login(request):
+    dashboard_session_context = DashboardSession()
+    if request.POST:
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return HttpResponse('USER DOES NOT EXIST!')
+        login(request, user)
+        return HttpResponseRedirect(request.GET.get('next', '/')) 
+        
+    loginForm = LoginForm(use_required_attribute=False)
+    dashboard_session_context.add_login_form = loginForm
+    dashboard_session_context.url_query_string = request.GET.get('next', '/')
+    
+
+    return render (request, 'AdminDashboard/landing_page/login/login.html', {'dashboard_session': dashboard_session_context})
+
+
+@staff_member_required(redirect_field_name='next', login_url='AdminDashboard:login')
 def admin_dashboard(request):
    
     customers = filter_customers(request.GET.get('filter', '30')).values()
