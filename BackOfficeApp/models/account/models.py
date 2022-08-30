@@ -35,17 +35,3 @@ class AccountItem(models.Model):
         if self.id:
             self.updated_at = timezone.now()
         return super(AccountItem, self).save(*args, **kwargs)
-
-
-
-class AccountDemo(models.Model):
-  loan_amount = models.DecimalField("Loan Amount", max_digits=13, decimal_places=2, blank= False)
-  rate = models.DecimalField("Rate", max_digits=5, decimal_places=2, blank= False)
-  created_at = models.DateTimeField("Created Date")
-  customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-  number_of_products = models.IntegerField("Number Of Products", blank= False)
-  payment_due_date = models.DateField("Payment Due Date", blank= False)
-  created_at = models.DateTimeField("Created Date", auto_now_add=True)
-  def __str__(self):
-    return f'{self.loan_amount, self.customer }'
-   

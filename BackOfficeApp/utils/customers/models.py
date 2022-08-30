@@ -39,3 +39,5 @@ class DashboardSession:
   number_of_products = ''
   keep_product_image_form = ''
   keep_product_image = ''
+  add_login_form = ''
+  url_query_string = ''
